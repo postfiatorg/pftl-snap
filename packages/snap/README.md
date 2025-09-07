@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://www.thewarp.ai">
+  <a href="https://postfiat.org/">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset=".github/assets/logo512.png">
       <img src=".github/assets/logo512.png" height="150">
@@ -7,53 +7,39 @@
   </a>
 </p>
 <p align="center">
-  If you have a MetaMask wallet now you have an XRPL one.<br>
-  Securely manage your XRP and interact with XRPL-based DApps directly from MetaMask.<br>
-  The Warp expands on XRP Ledger for MetaMask by enabling support for multiple wallets which may be imported using Family Seeds.<br>
+  If you have a MetaMask wallet now you have an PFTL one.<br>
+  Securely manage your PFT and interact with PFTL-based DApps directly from MetaMask.<br>
+  The Post Fiat SNAP expands on PFT Ledger for MetaMask by enabling support for multiple wallets which may be imported using Family Seeds.<br>
 </p>
 </div>
 
-## Before Your Start
-
-<p>
-  The Warp is a postfiat.org community project.<br>
-  The Warp is a fork for XRPL Ledger for MetaMask. The Warp is pending approval from Consensys to be added to the MetaMask Allowlist.<br>
-  In the interim, users will need to use 
-  <a href="https://chromewebstore.google.com/detail/metamask-flask-developmen/ljfoeinjpaedjfecbmggjgodbgkmjkjk?hl=en" target="_blank" rel="noopener noreferrer">
-    MetaMask Flask
-  </a> 
-  to interact with The Warp snap and site.
-</p>
-
 ## Overview
 
-The Warp is a modified version of XRPL Ledger for MetaMask originally created by Peersyst. 
+The PFT Ledger for MetaMask is an extension that allows users to interact with the PFT Ledger (PFTL) directly from their MetaMask wallet. This Snap introduces support for PFTL, enabling users to manage PFT and other tokens on the PFTL, perform transactions, and interact with PFTL-based decentralized applications (DApps).
 
-The XRP Ledger for MetaMask is an extension that allows users to interact with the XRP Ledger (XRPL) directly from their MetaMask wallet. This Snap introduces support for XRPL, enabling users to manage XRP and other tokens on the XRPL, perform transactions, and interact with XRPL-based decentralized applications (DApps).
+## PFTL for MetaMask Original Features
 
-## XRPL for MetaMask Original Features
-
-- **XRPL Integration**: Manage XRP and XRPL tokens within MetaMask. (limitted 
-- **Transaction Support**: Send and receive XRP and other XRPL tokens.
-- **DApp Interaction**: Use XRPL-based DApps seamlessly.
+- **PFTL Integration**: Manage PFT and PFTL tokens within MetaMask.
+- **Transaction Support**: Send and receive PFT and other PFTL tokens.
+- **DApp Interaction**: Use PFTL-based DApps seamlessly.
 - **Account Management**: View account balances, transaction history, and other details.
-- **Secure and User-Controlled**: Full control over your XRPL keys and permissions.
+- **Secure and User-Controlled**: Full control over your PFTL keys and permissions.
 
-- ## The Warp Expanded Features
+- ## The Post Fiat SNAP Expanded Features
 
-- **Multiple XRPL Wallet Support**: Import and manage mutltiple XRPL wallets from family seeds.
+- **Multiple PFTL Wallet Support**: Import and manage mutltiple PFTL wallets from family seeds.
 
 - **Site Feature Expansion**: Memo transactions, Import Wallet, Switch Wallet, Trust Lines.
 
 
 ## Usage
 
-To use the XRP Ledger, first install it by following these steps:
+To use the PFT Ledger, first install it by following these steps:
 
 1. **Open MetaMask**: Ensure you have the latest version of the MetaMask extension installed in your browser.
 2. **Navigate to Settings**: Click on the MetaMask icon, go to settings, and look for the Snaps section.
-3. **Add XRP Ledger**: In the Snaps section, add the XRP Ledger by providing its URL or selecting it from the Snap store.
-4. **Install Snap**: Click on the XRP Ledger and follow the prompts to add it to your MetaMask wallet.
+3. **Add PFT Ledger**: In the Snaps section, add the PFT Ledger by providing its URL or selecting it from the Snap store.
+4. **Install Snap**: Click on the PFT Ledger and follow the prompts to add it to your MetaMask wallet.
 5. **Enable Snap**: Once installed, enable the Snap and grant necessary permissions.
 
 ## Development
@@ -63,7 +49,7 @@ Here’s a basic guide to get started:
 ### Prerequisites
 
 - Node.js
-- [MetaMask Flask](https://metamask.io/flask/)
+- [MetaMask](https://metamask.io/)
 
 ### Installation
 
@@ -79,7 +65,7 @@ yarn start
 
 - To only start the UI, navigate to `packages/site` and start from there. The same applies to the snap in `packages/snap`.
 - If you make changes to the snap, first remove the previously installed version to see the changes.
-- Enable the [MetaMask Flask](https://metamask.io/flask/) in your extensions.
+- Enable the [MetaMask](https://metamask.io/) in your extensions.
 
 ## API
 
@@ -91,7 +77,7 @@ Use the following request to install the Snap:
 provider.request({
   method: 'wallet_requestSnaps',
   params: {
-    ['npm:xrpl-snap']: {},
+    ['npm:PFTL-snap']: {},
   },
 });
 ```
@@ -112,9 +98,9 @@ To make requests using the RPC, use the following code:
 provider.request({
   method: 'wallet_invokeSnap',
   params: {
-    snapId: 'npm:xrpl-snap',
+    snapId: 'npm:PFTL-snap',
     request: {
-      method: 'xrpl_request',
+      method: 'PFTL_request',
       params: { command: 'account_info', account: 'rBg...' },
     },
   },
@@ -129,9 +115,9 @@ Get current account:
 provider.request({
   method: 'wallet_invokeSnap',
   params: {
-    snapId: 'npm:xrpl-snap',
+    snapId: 'npm:PFTL-snap',
     request: {
-      method: 'xrpl_getAccount',
+      method: 'PFTL_getAccount',
     },
   },
 });
@@ -145,9 +131,9 @@ provider.request({
 provider.request({
   method: 'wallet_invokeSnap',
   params: {
-    snapId: 'npm:xrpl-snap',
+    snapId: 'npm:PFTL-snap',
     request: {
-      method: 'xrpl_getStoredNetworks',
+      method: 'PFTL_getStoredNetworks',
     },
   },
 });
@@ -159,9 +145,9 @@ provider.request({
 provider.request({
   method: 'wallet_invokeSnap',
   params: {
-    snapId: 'npm:xrpl-snap',
+    snapId: 'npm:PFTL-snap',
     request: {
-      method: 'xrpl_getActiveNetwork',
+      method: 'PFTL_getActiveNetwork',
     },
   },
 });
@@ -173,9 +159,9 @@ provider.request({
 provider.request({
   method: 'wallet_invokeSnap',
   params: {
-    snapId: 'npm:xrpl-snap',
+    snapId: 'npm:PFTL-snap',
     request: {
-      method: 'xrpl_changeNetwork',
+      method: 'PFTL_changeNetwork',
       params: { chainId: 1 }, // Example chainId
     },
   },
@@ -190,9 +176,9 @@ To sign and submit transactions
 provider.request({
   method: 'wallet_invokeSnap',
   params: {
-    snapId: 'npm:xrpl-snap',
+    snapId: 'npm:PFTL-snap',
     request: {
-      method: 'xrpl_signAndSubmit',
+      method: 'PFTL_signAndSubmit',
       params: {
         TransactionType: 'Payment',
         Account: 'rBg...',
@@ -204,20 +190,20 @@ provider.request({
 });
 ```
 
-- If you only want to sign the transaction use `xrpl_sign`.
+- If you only want to sign the transaction use `PFTL_sign`.
 
 ## Support
 
 For support and further information, refer to the following resources:
 
-- **XRPL Documentation**: [XRPL.org](https://xrpl.org/)
+- **Documentation**: [https://docs.PFTLsnap.com/](https://postfiat.org/)
 - **MetaMask Snaps Documentation**: [MetaMask Snaps](https://docs.metamask.io/snaps/)
 
 ## Contributing
 
-We welcome contributions to the XRP Ledger project. To contribute, please follow these steps:
+We welcome contributions to the PFT Ledger project. To contribute, please follow these steps:
 
-1. **Fork the Repository**: Fork the XRP Ledger repository on GitHub.
+1. **Fork the Repository**: Fork the PFT Ledger repository on GitHub.
 2. **Create a Branch**: Create a new branch for your feature or bugfix.
 3. **Submit a Pull Request**: Submit a pull request with a detailed description of your changes.
 

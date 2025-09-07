@@ -1,18 +1,18 @@
 {
-  "version": "1.1.3",
-  "description": "The Warp - MetaMask XRPL Snap - Securely manage your XRP and interact with XRPL-based DApps directly from MetaMask",
-  "proposedName": "The Warp",
+  "version": "1.1.4",
+  "description": "PFTL Snap - MetaMask XRPL Snap - Securely manage your XRP and interact with XRPL-based DApps directly from MetaMask",
+  "proposedName": "PFTL Snap",
   "repository": {
     "type": "git",
-    "url": "https://github.com/prometheus88/the-warp.git"
+    "url": "https://github.com/postfiatorg/pftl-snap.git"
   },
   "source": {
-    "shasum": "kFLlB3dIEn/JbwNGs08GiedLIruqW267bdeVv2cAp/Q=",
+    "shasum": "hOmPVgCW71g3PycG+GhnhnfF9JtBj8NckrDTMSMLyPs=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
         "iconPath": "images/icon.svg",
-        "packageName": "@thewarp/xrpl-snap",
+        "packageName": "@postfiat/pftl-snap",
         "registry": "https://registry.npmjs.org/"
       }
     }
