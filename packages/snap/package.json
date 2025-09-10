@@ -1,7 +1,7 @@
 {
   "name": "@postfiat/pftl-snap",
-  "version": "1.1.4",
-  "description": "PFTL Snap - MetaMask XRPL Snap - Securely manage your XRP and interact with XRPL-based DApps directly from MetaMask",
+  "version": "1.1.5",
+  "description": "PFTL - MetaMask Extension - Securely manage your PFT and interact with PFTL-based DApps directly from MetaMask",
   "repository": {
     "type": "git",
     "url": "https://github.com/postfiatorg/pftl-snap.git"

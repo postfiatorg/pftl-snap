@@ -1,13 +1,13 @@
 {
-  "version": "1.1.4",
-  "description": "PFTL Snap - MetaMask XRPL Snap - Securely manage your XRP and interact with XRPL-based DApps directly from MetaMask",
-  "proposedName": "PFTL Snap",
+  "version": "1.1.5",
+  "description": "PFTL - MetaMask Extension - Securely manage your PFT and interact with PFTL-based DApps directly from MetaMask",
+  "proposedName": "PFTL",
   "repository": {
     "type": "git",
     "url": "https://github.com/postfiatorg/pftl-snap.git"
   },
   "source": {
-    "shasum": "hOmPVgCW71g3PycG+GhnhnfF9JtBj8NckrDTMSMLyPs=",
+    "shasum": "54X1+6twNRyYEgWygzpnfYrb1VyOxk3+5i3SLmxev40=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
