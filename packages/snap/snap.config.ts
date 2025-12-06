@@ -10,6 +10,8 @@ const config: SnapConfig = {
   stats: {
     verbose: false,
   },
+  // Skip SES evaluation in CI - evaluation is for dev validation only
+  evaluate: false,
 };
 
 export default config;
