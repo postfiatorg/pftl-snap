@@ -26,6 +26,8 @@ module.exports = {
     '@typescript-eslint/no-throw-literal': 'off',
     'jsdoc/check-tag-names': 'off',
     '@typescript-eslint/naming-convention': 'off',
+    'no-console': 'error',
+    'no-warning-comments': ['error', { terms: ['todo', 'fixme'], location: 'start' }],
   },
 
   ignorePatterns: ['!.eslintrc.js', 'dist/'],
