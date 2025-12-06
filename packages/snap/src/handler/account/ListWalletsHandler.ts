@@ -3,19 +3,19 @@ import type { IHandler } from '../IHandler';
 
 export const ListWalletsMethod = 'xrpl_listWallets';
 
-export interface WalletInfo {
+export type WalletInfo = {
   address: string;
   publicKey: string;
   type: 'derived' | 'imported';
   isActive: boolean;
-}
+};
 
 export class ListWalletsHandler implements IHandler<typeof ListWalletsMethod> {
   constructor(protected readonly context: Context) {}
 
   async handle(): Promise<{ wallets: WalletInfo[] }> {
     const state = await this.context.stateManager.get();
-    
+
     // Get the derived wallet info - use the base derived wallet address
     const derivedWallet: WalletInfo = {
       address: this.context.derivedWallet.address,
@@ -36,4 +36,4 @@ export class ListWalletsHandler implements IHandler<typeof ListWalletsMethod> {
       wallets: [derivedWallet, ...importedWallets],
     };
   }
-} 
+}

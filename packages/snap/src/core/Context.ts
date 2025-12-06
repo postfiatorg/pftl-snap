@@ -4,26 +4,26 @@ import { EncryptionManager } from './utils/encryption';
 import { Wallet } from './Wallet';
 
 export class Context {
-  readonly #wallet: Wallet;
+  private readonly _wallet: Wallet;
 
-  #activeImportedWallet?: Wallet;
+  private _activeImportedWallet?: Wallet;
 
   constructor(
     public readonly stateManager: StateManager,
     public readonly provider: Provider,
     derivedWallet: Wallet,
   ) {
-    this.#wallet = derivedWallet;
+    this._wallet = derivedWallet;
   }
 
   get wallet(): Wallet {
     // Return the active imported wallet if it exists, otherwise return the derived wallet
-    return this.#activeImportedWallet ?? this.#wallet;
+    return this._activeImportedWallet ?? this._wallet;
   }
 
   get derivedWallet(): Wallet {
     // Always return the derived wallet
-    return this.#wallet;
+    return this._wallet;
   }
 
   static async init(): Promise<Context> {
@@ -41,15 +41,11 @@ export class Context {
 
     // If there's an active imported wallet, initialize it
     if (state.activeImportedWallet) {
-      const importedWallet = state.importedWallets.find(
-        (iw) => iw.address === state.activeImportedWallet,
-      );
+      const importedWallet = state.importedWallets.find((iw) => iw.address === state.activeImportedWallet);
       if (importedWallet) {
         try {
-          const decryptedSeed = await EncryptionManager.decryptData(
-            importedWallet.encryptedSeed,
-          );
-          context.#activeImportedWallet = Wallet.fromSeed(decryptedSeed);
+          const decryptedSeed = await EncryptionManager.decryptData(importedWallet.encryptedSeed);
+          context._activeImportedWallet = Wallet.fromSeed(decryptedSeed);
         } catch {
           // Don't throw, just continue without the imported wallet
           // Clear the active imported wallet reference in state since we couldn't load it
@@ -67,7 +63,7 @@ export class Context {
   async updateActiveWallet(address?: string): Promise<void> {
     if (!address) {
       // Switch to derived wallet
-      this.#activeImportedWallet = undefined;
+      this._activeImportedWallet = undefined;
 
       // Update state to explicitly clear the active imported wallet reference
       // and ensure we're tracking the derived wallet address
@@ -82,7 +78,7 @@ export class Context {
     // Check if this is the derived wallet address
     if (address === this.derivedWallet.address) {
       // Switch to derived wallet
-      this.#activeImportedWallet = undefined;
+      this._activeImportedWallet = undefined;
       await this.stateManager.set({
         activeImportedWallet: undefined,
         derivedWalletAddress: address,
@@ -92,16 +88,12 @@ export class Context {
 
     try {
       const state = await this.stateManager.get();
-      const importedWallet = state.importedWallets.find(
-        (iw) => iw.address === address,
-      );
+      const importedWallet = state.importedWallets.find((iw) => iw.address === address);
       if (!importedWallet) {
         throw new Error(`Wallet not found for address: ${address}`);
       }
 
-      const decryptedSeed = await EncryptionManager.decryptData(
-        importedWallet.encryptedSeed,
-      );
+      const decryptedSeed = await EncryptionManager.decryptData(importedWallet.encryptedSeed);
 
       if (!decryptedSeed) {
         throw new Error('Failed to decrypt seed');
@@ -115,7 +107,7 @@ export class Context {
         throw new Error(`Address mismatch: expected ${address}, got ${newWallet.address}`);
       }
 
-      this.#activeImportedWallet = newWallet;
+      this._activeImportedWallet = newWallet;
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Failed to activate wallet: ${error.message}`);
@@ -125,4 +117,3 @@ export class Context {
     }
   }
 }
-

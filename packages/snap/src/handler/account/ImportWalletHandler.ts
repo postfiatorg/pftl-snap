@@ -1,10 +1,10 @@
 import { InvalidParamsError, UserRejectedRequestError } from '@metamask/snaps-sdk';
 
 import type { Context } from '../../core/Context';
+import { EncryptionManager } from '../../core/utils/encryption';
 import { Wallet } from '../../core/Wallet';
 import { ImportWalletDialog } from '../../dialog/account/ImportWalletDialog';
 import type { IHandler } from '../IHandler';
-import { EncryptionManager } from '../../core/utils/encryption';
 
 export const ImportWalletMethod = 'xrpl_importWallet';
 
@@ -62,4 +62,4 @@ export class ImportWalletHandler implements IHandler<typeof ImportWalletMethod> 
 
     return { address: wallet.address };
   }
-} 
+}
