@@ -6,7 +6,7 @@ This document describes the Continuous Integration and Continuous Deployment pip
 The CI pipeline is triggered on:
 - **Push**: Commits pushed to `main` and `dev` branches.
 - **Pull Request**: Opened against `main` or `dev`.
-- **Schedule**: Nightly builds to ensure long-term stability.
+- **Manual**: Can be triggered manually from the GitHub Actions tab.
 
 ## Automated Checks (GitHub Actions)
 The following checks are performed automatically:

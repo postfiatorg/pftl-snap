@@ -5,8 +5,7 @@ on:
     branches: [main, dev]
   pull_request:
     branches: [main, dev]
-  schedule:
-    - cron: '0 0 * * *' # Run nightly at midnight UTC
+  workflow_dispatch:
 
 jobs:
   check-workflows:
