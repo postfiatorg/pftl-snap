@@ -2,7 +2,7 @@
 
 This document logs notable, developer-facing updates to the NEAR Mobile Wallet.
 
-## Unpublished
+## 1.1.5 — 2025-12-06
 
 ### 📚 Third-Party Library Updates
 
