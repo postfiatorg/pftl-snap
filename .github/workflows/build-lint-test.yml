@@ -68,7 +68,7 @@ jobs:
           key: snap-${{ runner.os }}-${{ github.sha }}
       - run: yarn --immutable
       - name: Run core tests
-        run: yarn test --testPathPattern="(Wallet|wallet-utils|GetStoredNetworks|GetActiveNetwork|RequestHandler|SubmitHandler|GetAccountHandler)"
+        run: yarn test --testPathPattern="(core/Wallet|core/wallet-utils|network/GetStoredNetworks|network/GetActiveNetwork|network/RequestHandler|transaction/SubmitHandler\\.spec|account/GetAccountHandler)"
       - name: Require clean working directory
         shell: bash
         run: |
