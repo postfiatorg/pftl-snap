@@ -48,7 +48,8 @@ export class Context {
           const decryptedSeed = await EncryptionManager.decryptData(
             importedWallet.encryptedSeed
           );
-          context._activeImportedWallet = Wallet.fromSeed(decryptedSeed);
+          // Use fromPrivateKey to handle both seeds (starting with 's') and raw private keys
+          context._activeImportedWallet = Wallet.fromPrivateKey(decryptedSeed);
         } catch (error) {
           // Don't throw, just continue without the imported wallet
           
@@ -105,8 +106,8 @@ export class Context {
         throw new Error('Failed to decrypt seed');
       }
 
-      // Create wallet from the decrypted seed
-      const newWallet = Wallet.fromSeed(decryptedSeed);
+      // Create wallet from the decrypted seed or private key
+      const newWallet = Wallet.fromPrivateKey(decryptedSeed);
 
       // Verify that the created wallet matches the expected address
       if (newWallet.address !== address) {

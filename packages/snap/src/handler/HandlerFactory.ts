@@ -8,8 +8,11 @@ import { ChangeNetworkHandler, ChangeNetworkMethod } from './network/ChangeNetwo
 import { GetActiveNetworkHandler, GetActiveNetworkMethod } from './network/GetActiveNetworkHandler';
 import { GetStoredNetworksHandler, GetStoredNetworksMethod } from './network/GetStoredNetworksHandler';
 import { RequestHandler, RequestMethod } from './network/RequestHandler';
-import { SignHandler, SignMethod } from './transaction/SignHandler';
+import { GetNostrPublicKeyHandler, GetNostrPublicKeyMethod } from './nostr/GetNostrPublicKeyHandler';
+import { ImportNostrKeyHandler, ImportNostrKeyMethod } from './nostr/ImportNostrKeyHandler';
+import { SignEventHandler, SignEventMethod } from './nostr/SignEventHandler';
 import { SignAndSubmitHandler, SignAndSubmitMethod } from './transaction/SignAndSubmitHandler';
+import { SignHandler, SignMethod } from './transaction/SignHandler';
 import { SignMessageHandler, SignMessageMethod } from './transaction/SignMessageHandler';
 
 export const HandlerFactory = (context: Context) => ({
@@ -25,4 +28,7 @@ export const HandlerFactory = (context: Context) => ({
   [ImportWalletMethod]: new ImportWalletHandler(context),
   [ListWalletsMethod]: new ListWalletsHandler(context),
   [SwitchWalletMethod]: new SwitchWalletHandler(context),
+  [ImportNostrKeyMethod]: new ImportNostrKeyHandler(context),
+  [SignEventMethod]: new SignEventHandler(context),
+  [GetNostrPublicKeyMethod]: new GetNostrPublicKeyHandler(context),
 });
