@@ -1,7 +1,7 @@
-import { InvalidParamsError } from '@metamask/snaps-sdk';
+import { InvalidParamsError, NodeType } from '@metamask/snaps-sdk';
+
 import type { Context } from '../../core/Context';
 import type { IHandler } from '../IHandler';
-import { NodeType } from '@metamask/snaps-sdk';
 
 export const SwitchWalletMethod = 'xrpl_switchWallet';
 
@@ -58,4 +58,4 @@ export class SwitchWalletHandler implements IHandler<typeof SwitchWalletMethod> 
 
     return { address: importedWallet.address };
   }
-} 
+}

@@ -9,6 +9,7 @@ export type ImportedWallet = {
   address: string;
   publicKey: string;
   encryptedSeed: string;
+  encryptedNostrKey?: string; // Raw 32-byte Nostr private key (hex), encrypted
 };
 
 export type State = {
@@ -44,8 +45,14 @@ export const DEFAULT_NETWORKS: Network[] = [
   {
     chainId: 2025,
     name: 'PFTL Testnet',
-    nodeUrl: 'https://validator.thewarp.ai/rpc',
+    nodeUrl: 'https://rpc.testnet.postfiat.org:5006',
     explorerUrl: 'https://explorer.testnet.postfiat.org',
+  },
+  {
+    chainId: 2024,
+    name: 'PFTL Devnet',
+    nodeUrl: 'https://rpc.devnet.postfiat.org:5006',
+    explorerUrl: 'https://explorer.devnet.postfiat.org',
   },
 ];
 

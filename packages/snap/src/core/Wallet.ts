@@ -1,6 +1,7 @@
 /* eslint-disable lines-between-class-members */
 /* eslint-disable no-restricted-syntax */
 import { getBIP44AddressKeyDeriver } from '@metamask/key-tree';
+import { secp256k1 } from '@noble/curves/secp256k1.js';
 import { sign, deriveAddress, generateSeed, deriveKeypair } from 'ripple-keypairs';
 import { type Transaction, Wallet as XrplWallet } from 'xrpl';
 
@@ -62,30 +63,65 @@ export class Wallet {
     return new Wallet(classicAddress, xrpPublicKey, xrpPrivateKey);
   }
 
+  /**
+   * Create a Wallet from a raw 32-byte hex private key using secp256k1 curve math.
+   * This correctly derives the compressed public key with proper 02/03 prefix based on y-parity.
+   * @param hexPrivateKey
+   */
+  public static fromRawHex(hexPrivateKey: string): Wallet {
+    // Normalize the hex key (remove 0x prefix if present, ensure lowercase for conversion)
+    const cleanHex = hexPrivateKey.replace(/^0x/, '').toLowerCase();
+
+    if (!/^[0-9a-f]{64}$/.test(cleanHex)) {
+      throw new Error('Invalid hex private key: must be exactly 64 hex characters');
+    }
+
+    // Convert to Uint8Array for secp256k1
+    const privateKeyBytes = Uint8Array.from(Buffer.from(cleanHex, 'hex'));
+
+    // Use secp256k1 to compute the COMPRESSED public key (33 bytes)
+    // This correctly determines 02 (even y) or 03 (odd y) based on actual curve math
+    const compressedPubKeyBytes = secp256k1.getPublicKey(privateKeyBytes, true);
+
+    // Convert to uppercase hex for XRPL format
+    const xrplPublicKey = Buffer.from(compressedPubKeyBytes).toString('hex').toUpperCase();
+
+    // XRPL private key format: '00' + raw hex (uppercase)
+    const xrplPrivateKey = `00${cleanHex.toUpperCase()}`;
+
+    // Derive address from compressed public key
+    const address = deriveAddress(xrplPublicKey);
+
+    return new Wallet(address, xrplPublicKey, xrplPrivateKey);
+  }
+
   public static fromPrivateKey(privateKey: string): Wallet {
     try {
-      // If it starts with 's', treat it as a seed
+      // If it starts with 's', treat it as a family seed
       if (privateKey.startsWith('s')) {
         return this.fromSeed(privateKey);
       }
 
-      // Remove any prefixes if present and ensure uppercase
-      const cleanPrivateKey = privateKey.replace(/^(?:00|s)/, '').toUpperCase();
-      
+      // Check if it's a raw 64-char hex key (Nostr format)
+      const cleanHex = privateKey.replace(/^(0x|00)/, '').toLowerCase();
+      if (/^[0-9a-f]{64}$/.test(cleanHex)) {
+        // Use proper secp256k1 curve math to derive the correct public key
+        return this.fromRawHex(cleanHex);
+      }
+
+      // Try as XRPL formatted key (00 + 64 hex = 66 chars)
+      if (/^00[0-9a-fA-F]{64}$/.test(privateKey)) {
+        const rawHex = privateKey.slice(2);
+        return this.fromRawHex(rawHex);
+      }
+
+      // Last resort: try as seed without 's' prefix
       try {
-        // First try to treat it as a seed without the 's' prefix
-        const keypair = deriveKeypair(`s${cleanPrivateKey}`);
+        const keypair = deriveKeypair(`s${privateKey}`);
         const address = deriveAddress(keypair.publicKey);
         return new Wallet(address, keypair.publicKey, keypair.privateKey);
-      } catch (firstError) {
-        try {
-          // Try to derive keypair directly from the private key
-          const keypair = deriveKeypair(cleanPrivateKey);
-          const address = deriveAddress(keypair.publicKey);
-          return new Wallet(address, keypair.publicKey, keypair.privateKey);
-        } catch (secondError) {
-          throw new Error('Invalid private key or seed format');
-        }
+      } catch {
+        throw new Error('Invalid private key or seed format');
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -99,18 +135,38 @@ export class Wallet {
   public static fromSeed(seed: string): Wallet {
     try {
       // Validate and clean the seed
-      if (!seed.startsWith('s')) {
-        seed = `s${seed}`;
+      let cleanSeed = seed;
+      if (!cleanSeed.startsWith('s')) {
+        cleanSeed = `s${cleanSeed}`;
       }
 
       // Generate keypair from seed
-      const keypair = deriveKeypair(seed);
+      const keypair = deriveKeypair(cleanSeed);
       const address = deriveAddress(keypair.publicKey);
 
       return new Wallet(address, keypair.publicKey, keypair.privateKey);
     } catch (error) {
       throw new Error('Invalid seed format');
     }
+  }
+
+  /**
+   * Create a Wallet from a Nostr hex key using the stored address and public key.
+   * This is used when re-activating a Nostr-imported wallet where the address/publicKey
+   * were already derived and stored at import time.
+   */
+  public static fromNostrKey(hexKey: string, address: string, publicKey: string): Wallet {
+    // Normalize the hex key
+    const cleanHex = hexKey.replace(/^0x/, '').toLowerCase();
+    
+    if (!/^[0-9a-f]{64}$/i.test(cleanHex)) {
+      throw new Error('Invalid Nostr key: must be 64 hex characters');
+    }
+    
+    // XRPL private key format: '00' + raw hex (uppercase)
+    const xrplPrivateKey = `00${cleanHex.toUpperCase()}`;
+    
+    return new Wallet(address, publicKey, xrplPrivateKey);
   }
 
   public static generateNew(): { wallet: Wallet; seed: string } {

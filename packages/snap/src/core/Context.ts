@@ -1,10 +1,11 @@
 import { Provider } from './Provider';
+import type { ImportedWallet } from './StateManager';
 import { StateManager } from './StateManager';
-import { Wallet } from './Wallet';
 import { EncryptionManager } from './utils/encryption';
+import { Wallet } from './Wallet';
 
 export class Context {
-  private _wallet: Wallet;
+  private readonly _wallet: Wallet;
   private _activeImportedWallet?: Wallet;
 
   constructor(
@@ -23,6 +24,22 @@ export class Context {
   get derivedWallet(): Wallet {
     // Always return the derived wallet
     return this._wallet;
+  }
+
+  /**
+   * Create a wallet from an imported wallet entry, handling both XRPL seeds and Nostr keys
+   */
+  private static async createWalletFromImported(importedWallet: ImportedWallet): Promise<Wallet> {
+    // Check if this is a Nostr-imported wallet (has encryptedNostrKey)
+    if (importedWallet.encryptedNostrKey) {
+      const nostrKey = await EncryptionManager.decryptData(importedWallet.encryptedNostrKey);
+      // Create wallet using the stored address and public key
+      return Wallet.fromNostrKey(nostrKey, importedWallet.address, importedWallet.publicKey);
+    }
+
+    // Regular XRPL seed import
+    const decryptedSeed = await EncryptionManager.decryptData(importedWallet.encryptedSeed);
+    return Wallet.fromPrivateKey(decryptedSeed);
   }
 
   static async init(): Promise<Context> {
@@ -45,14 +62,10 @@ export class Context {
       );
       if (importedWallet) {
         try {
-          const decryptedSeed = await EncryptionManager.decryptData(
-            importedWallet.encryptedSeed
-          );
-          // Use fromPrivateKey to handle both seeds (starting with 's') and raw private keys
-          context._activeImportedWallet = Wallet.fromPrivateKey(decryptedSeed);
+          context._activeImportedWallet = await Context.createWalletFromImported(importedWallet);
         } catch (error) {
           // Don't throw, just continue without the imported wallet
-          
+          console.error('Failed to restore imported wallet:', error);
           // Clear the active imported wallet reference in state since we couldn't load it
           await stateManager.set({ activeImportedWallet: undefined });
         }
@@ -98,16 +111,8 @@ export class Context {
         throw new Error(`Wallet not found for address: ${address}`);
       }
 
-      const decryptedSeed = await EncryptionManager.decryptData(
-        importedWallet.encryptedSeed
-      );
-      
-      if (!decryptedSeed) {
-        throw new Error('Failed to decrypt seed');
-      }
-
-      // Create wallet from the decrypted seed or private key
-      const newWallet = Wallet.fromPrivateKey(decryptedSeed);
+      // Create wallet using the appropriate method based on wallet type
+      const newWallet = await Context.createWalletFromImported(importedWallet);
 
       // Verify that the created wallet matches the expected address
       if (newWallet.address !== address) {

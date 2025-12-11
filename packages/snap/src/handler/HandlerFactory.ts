@@ -8,6 +8,8 @@ import { ChangeNetworkHandler, ChangeNetworkMethod } from './network/ChangeNetwo
 import { GetActiveNetworkHandler, GetActiveNetworkMethod } from './network/GetActiveNetworkHandler';
 import { GetStoredNetworksHandler, GetStoredNetworksMethod } from './network/GetStoredNetworksHandler';
 import { RequestHandler, RequestMethod } from './network/RequestHandler';
+import { DecryptNip44Handler, DecryptNip44Method } from './nostr/DecryptNip44Handler';
+import { EncryptNip44Handler, EncryptNip44Method } from './nostr/EncryptNip44Handler';
 import { GetNostrPublicKeyHandler, GetNostrPublicKeyMethod } from './nostr/GetNostrPublicKeyHandler';
 import { ImportNostrKeyHandler, ImportNostrKeyMethod } from './nostr/ImportNostrKeyHandler';
 import { SignEventHandler, SignEventMethod } from './nostr/SignEventHandler';
@@ -31,4 +33,6 @@ export const HandlerFactory = (context: Context) => ({
   [ImportNostrKeyMethod]: new ImportNostrKeyHandler(context),
   [SignEventMethod]: new SignEventHandler(context),
   [GetNostrPublicKeyMethod]: new GetNostrPublicKeyHandler(context),
+  [EncryptNip44Method]: new EncryptNip44Handler(context),
+  [DecryptNip44Method]: new DecryptNip44Handler(context),
 });

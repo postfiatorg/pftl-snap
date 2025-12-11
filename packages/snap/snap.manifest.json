@@ -1,18 +1,18 @@
 {
-  "version": "1.1.5",
-  "description": "PFTL - MetaMask Extension - Securely manage your PFT and interact with PFTL-based DApps directly from MetaMask",
-  "proposedName": "PFTL",
+  "version": "1.0.9",
+  "description": "Post Fiat Nostr Snap - MetaMask Extension for PFTL wallets with Nostr identity support",
+  "proposedName": "PFT Nostr",
   "repository": {
     "type": "git",
     "url": "https://github.com/postfiatorg/pftl-snap.git"
   },
   "source": {
-    "shasum": "JSjRjHcmdSta2x7B4ZVPLf34GaY+F6gDBgbOxipGoWc=",
+    "shasum": "W61O6WI/h2idjwgZ0QFuldWhRwkvQbMxK42GKFznWYM=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
         "iconPath": "images/icon.svg",
-        "packageName": "@postfiat/pftl-snap",
+        "packageName": "@thewarp/pft-nostr-snap",
         "registry": "https://registry.npmjs.org/"
       }
     }

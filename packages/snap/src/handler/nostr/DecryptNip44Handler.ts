@@ -1,12 +1,12 @@
 import { InvalidParamsError } from '@metamask/snaps-sdk';
-import { finalizeEvent } from 'nostr-tools';
+import * as nip44 from 'nostr-tools/nip44';
 import { deriveKeypair } from 'ripple-keypairs';
 
 import type { Context } from '../../core/Context';
 import { EncryptionManager } from '../../core/utils/encryption';
 import type { IHandler } from '../IHandler';
 
-export const SignEventMethod = 'nostr_signEvent';
+export const DecryptNip44Method = 'nostr_nip44Decrypt';
 
 /**
  * Extract the raw 32-byte private key from various formats:
@@ -41,19 +41,19 @@ function extractRawPrivateKey(keyInput: string): string {
   return key.toLowerCase();
 }
 
-export class SignEventHandler implements IHandler<typeof SignEventMethod> {
+export class DecryptNip44Handler implements IHandler<typeof DecryptNip44Method> {
   constructor(protected readonly context: Context) {}
 
-  async handle(origin: string, params: { event: any }): Promise<any> {
-    if (!params.event) {
-      throw new InvalidParamsError('Event template must be provided');
+  async handle(origin: string, params: { pubkey: string; ciphertext: string }): Promise<string> {
+    if (!params.pubkey || !params.ciphertext) {
+      throw new InvalidParamsError('pubkey and ciphertext are required');
     }
 
     const state = await this.context.stateManager.get();
 
     let hexKey: string;
 
-    // First, check if there's an active imported wallet with a Nostr key
+    // Get the private key
     const activeImportedAddress = state.activeImportedWallet;
     if (activeImportedAddress) {
       const importedWallet = state.importedWallets.find((w) => w.address === activeImportedAddress);
@@ -61,39 +61,37 @@ export class SignEventHandler implements IHandler<typeof SignEventMethod> {
         const encryptedKey = importedWallet.encryptedNostrKey || importedWallet.encryptedSeed;
         if (encryptedKey) {
           const decryptedKey = await EncryptionManager.decryptData(encryptedKey);
-          // Check if it's a valid 32-byte hex key
           if (/^[a-fA-F0-9]{64}$/.test(decryptedKey)) {
             hexKey = decryptedKey.toLowerCase();
           } else {
-            // It might be an XRPL-formatted key, try to extract raw key
             hexKey = extractRawPrivateKey(decryptedKey);
           }
         }
       }
     }
 
-    // If no imported key, use the derived wallet's private key
     if (!hexKey!) {
       const { wallet } = this.context;
       if (!wallet) {
-        throw new InvalidParamsError('No wallet available. Please connect or import a key.');
+        throw new InvalidParamsError('No wallet available');
       }
-      // The derived wallet's privateKey is in XRPL format (00 + 32 bytes)
       hexKey = extractRawPrivateKey(wallet.privateKey);
     }
 
-    // Validate it's a proper 32-byte hex key
     if (!/^[a-fA-F0-9]{64}$/.test(hexKey)) {
       throw new InvalidParamsError('Invalid private key format');
     }
 
-    // Convert hex to Uint8Array for nostr-tools
+    // Convert to Uint8Array
     const sk = Uint8Array.from(Buffer.from(hexKey, 'hex'));
+    const senderPubkey = params.pubkey;
 
-    // Sign the event template
-    // finalizeEvent(eventTemplate, secretKey) returns the full signed event
-    const signedEvent = finalizeEvent(params.event, sk);
+    // Get conversation key for NIP-44 decryption
+    const conversationKey = nip44.v2.utils.getConversationKey(sk, senderPubkey);
 
-    return signedEvent;
+    // Decrypt the ciphertext
+    const plaintext = nip44.v2.decrypt(params.ciphertext, conversationKey);
+
+    return plaintext;
   }
 }
