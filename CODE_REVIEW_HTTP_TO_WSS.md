@@ -76,6 +76,8 @@ This is a MetaMask Snap (high trust boundary). Treat network endpoints + depende
 - [x] **P0-02:** Enforce `wss://` URL validation (and PFTL RPC allowlist) in `RPCClient` constructor + `changeNode()`
 - [x] **P0-03:** Fail closed on `server_info.network_id` (must exist + match expected PFTL network id) and ensure `request()` doesn’t bypass `connect()` logic
 - [x] **P0-04:** ~~Reduce supply-chain risk for `@peersyst/*` registry usage~~ **FULLY RESOLVED: Packages vendored locally, Chinese mirror removed**
+- [x] **P0-05:** Remove external “review transaction” URL that embeds full tx JSON into a querystring (privacy + phishing surface)
+- [x] **P0-06:** Remove unused Snap permissions (`endowment:ethereum-provider`, `endowment:rpc.snaps`) to minimize MetaMask review risk
 
 **Implemented in:**
 - `packages/snap/src/core/StateManager.ts` (PFTL-only `DEFAULT_NETWORKS` + state normalization)
@@ -83,6 +85,8 @@ This is a MetaMask Snap (high trust boundary). Treat network endpoints + depende
 - `.yarnrc.yml` (strict checksum + immutable installs, **npmmirror.com removed**)
 - `packages/vendor/@peersyst/*` (vendored packages)
 - `packages/site/package.json` (local file: references)
+- `packages/snap/src/dialog/transaction/TransactionDialog.ts` (removed external “review tx” link)
+- `packages/snap/snap.manifest.json` (removed unused permissions)
 
 ### P0 (Blockers / Must Address)
 
@@ -104,9 +108,10 @@ This is a MetaMask Snap (high trust boundary). Treat network endpoints + depende
 
 ### P1 (Strongly Recommended)
 
+- **Resolve `Math.random` bundle warning:** `mm-snap build` flags `Math.random` usage (currently coming from `bignumber.js`’s unused `BigNumber.random` helper). Consider patching/replacing to remove the warning and avoid reviewer concern.
 - **Connection race handling:** multiple rapid calls may concurrently call `client.connect()`; consider a single in-flight `connectPromise` to serialize connects.
 - **Reconnect behavior:** clarify whether xrpl.js auto-reconnects; if not, add a “retry once on disconnect” path for `request()`.
-- **Avoid bypassing `connect()` logic:** `request()` calls `client.connect()` directly (not `this.connect()`), so `server_info` capture may be skipped unless `autofill()` is used first.
+- **Clarify `network_id` strategy:** current implementation locks to a single PFTL testnet `network_id` (2025); if you ever add additional PFTL environments, make the expected `network_id` per-network and keep fail-closed behavior.
 
 --- 
 

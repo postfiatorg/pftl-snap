@@ -6,7 +6,6 @@ export default {
   TransactionHeader: 'Sign Post Fiat Transaction',
   TransactionSubHeader: 'Got a request from %origin% to sign the following transaction',
   TransactionFooter: '⚠️ Please check that all of the above fields are correct.',
-  VerifyCompleteTx: 'Verify the [complete transaction here](%uriTransaction%)',
   // Transaction fields
   TransactionType: 'TransactionType',
   Account: 'Account',
