@@ -8,6 +8,106 @@ This PR converts the PFTL MetaMask Snap from HTTP JSON-RPC to WebSocket communic
 
 ---
 
+## 🚨 P0-CRITICAL: @peersyst Supply Chain Risk (INHERITED FROM MAIN)
+
+### The Problem
+
+The **site** (not snap) depends on `@peersyst/*` packages which are **no longer available from official npm** (404 error). These packages were inherited from the original XRPL Snap codebase built by Peersyst.
+
+**This dependency was NOT introduced by this PR - it exists on the main branch.**
+
+### Severity: CRITICAL for Production
+
+```
+@peersyst/react-components: ^3.9.31
+@peersyst/react-components-core: ^1.7.19
+@peersyst/react-hooks: ^2.2.15
+@peersyst/react-utils: ^2.5.0
+```
+
+**255 imports** across the site codebase. @peersyst provides:
+- ALL UI components (Button, TextField, Select, Typography, Modal, etc.)
+- Theme system (createTheme, ThemePalette, GlobalStyles)
+- Providers (ConfigProvider, ModalProvider, ToastProvider)
+- Validators, utilities, hooks
+
+**The site cannot render without @peersyst.**
+
+### Current Workaround (UNACCEPTABLE FOR PRODUCTION)
+
+`.yarnrc.yml` pulls @peersyst from a Chinese npm mirror:
+```yaml
+npmScopes:
+  peersyst:
+    npmRegistryServer: "https://registry.npmmirror.com"
+```
+
+### Risk If Mirror Is Compromised
+
+An attacker controlling the UI components can:
+- Show fake balances
+- Replace destination addresses in transactions
+- Capture seed phrases via fake modals
+- Approve malicious transactions with spoofed confirmation UI
+
+### Required Actions Before Production
+
+| Option | Effort | Risk Reduction |
+|--------|--------|----------------|
+| **Vendor packages** into repo | 1 hour | Eliminates mirror dependency |
+| **Fork to @postfiat scope** | 2-3 hours | Full control + npm hosting |
+| **Replace with Chakra/Radix** | Days/Weeks | Clean slate, maintained libs |
+
+**Recommendation:** Vendor immediately, plan migration to maintained UI library.
+
+---
+
+## Reviewer Notes (Security / MetaMask Snap)
+
+This is a MetaMask Snap (high trust boundary). Treat network endpoints + dependency supply chain as **P0** risk areas.
+
+## Burndown (P0 Fixes)
+
+- [x] **P0-01:** Restrict Snap defaults to **PFTL testnet only** (no XRPL mainnet/testnet/devnet in `DEFAULT_NETWORKS`; default `activeNetwork` is PFTL)
+- [x] **P0-02:** Enforce `wss://` URL validation (and PFTL RPC allowlist) in `RPCClient` constructor + `changeNode()`
+- [x] **P0-03:** Fail closed on `server_info.network_id` (must exist + match expected PFTL network id) and ensure `request()` doesn’t bypass `connect()` logic
+- [x] **P0-04:** Reduce supply-chain risk for `@peersyst/*` registry usage (document rationale + add strict lock/checksum/immutable install protections)
+
+**Implemented in:**
+- `packages/snap/src/core/StateManager.ts` (PFTL-only `DEFAULT_NETWORKS` + state normalization)
+- `packages/snap/src/core/rpc-client/RpcClient.ts` (WSS allowlist + `server_info.network_id` fail-closed validation)
+- `.yarnrc.yml` (strict checksum + immutable installs)
+
+### P0 (Blockers / Must Address)
+
+1. **Supply chain risk: non-default registry for `@peersyst/*`.**
+   - `.yarnrc.yml` points `@peersyst` to `https://registry.npmmirror.com`.
+   - For a Snap, pulling from a mirror/alternate registry materially increases supply-chain risk and complicates provenance/verification.
+   - **Action:** Remove this and use the official registry (or a trusted internal registry), or explicitly justify the mirror + ensure CI enforces lockfile integrity and audited provenance for those packages.
+
+2. **PFTL-only network enforcement (avoid accidental XRPL connections).**
+   - The Snap is intended to operate on **Post Fiat (PFT) testnet only**.
+   - Current `DEFAULT_NETWORKS` still includes XRPL mainnet/testnet/devnet and defaults to XRPL mainnet (chainId 0), which can cause the UI/Snap to connect to XRPL endpoints by default.
+   - **Action:** Remove XRPL networks from `DEFAULT_NETWORKS` (or gate behind a dev-only flag) and set the default `activeNetwork` to PFTL testnet. Ensure the site + snap are consistent about the single supported network.
+
+3. **NetworkID / replay-protection can silently fail.**
+   - `RPCClient.connect()` calls `getServerInfo()`, but `getServerInfo()` swallows errors (silent failure).
+   - `RPCClient.request()` also connects via `this.client.connect()` directly (not `this.connect()`), so `networkID/buildVersion` may never be set even though the socket is connected.
+   - In this codebase, `NetworkID` is only set when `server_info.network_id` is loaded and `txNeedsNetworkID()` returns true. If `server_info` fails/is skipped, replay protection may be disabled (transactions may omit `NetworkID` when it should be present).
+   - **Action:** For PFTL, require `server_info.network_id` and fail closed if it’s missing/mismatched (do not sign/submit without it).
+
+4. **Enforce `wss://` scheme (and ideally allowlist) in code (defense in depth).**
+   - `RPCClient` accepts arbitrary `url: string` and constructs `new Client(url)` without validation.
+   - **Action:** Validate URLs are `wss://` (reject `ws://`, `http://`, `https://`, and non-URL strings) before connecting/changing nodes. For a PFTL-only snap, strongly consider allowlisting the expected PFTL RPC host(s).
+
+### P1 (Strongly Recommended)
+
+- **Connection race handling:** multiple rapid calls may concurrently call `client.connect()`; consider a single in-flight `connectPromise` to serialize connects.
+- **Reconnect behavior:** clarify whether xrpl.js auto-reconnects; if not, add a “retry once on disconnect” path for `request()`.
+- **Avoid bypassing `connect()` logic:** `request()` calls `client.connect()` directly (not `this.connect()`), so `server_info` capture may be skipped unless `autofill()` is used first.
+
+--- 
+
 ## PR Information
 
 - **Branch:** `remove-warp-references`
@@ -73,9 +173,12 @@ export class RPCClient {
 ```
 
 **Review Points:**
-- [ ] Verify lazy connection pattern is appropriate for snap lifecycle
-- [ ] Check error handling for WebSocket disconnection scenarios
-- [ ] Confirm xrpl.js Client handles reconnection automatically
+- [ ] **P0:** Ensure `server_info.network_id` is required and validated for PFTL (fail closed if missing/mismatched).
+- [ ] **P0:** Enforce `wss://` URL validation in `constructor()` and `changeNode()` (reject `ws://` / `http(s)://`).
+- [ ] **P0:** Ensure the client cannot connect to XRPL endpoints in production (PFTL-only allowlist).
+- [ ] **P1:** Serialize connection attempts to avoid concurrent `connect()` calls under load.
+- [ ] **P1:** Define/implement reconnect behavior for dropped sockets (does xrpl.js auto-reconnect?).
+- [ ] Verify lazy connection pattern is appropriate for snap lifecycle (idle shutdown / background suspension)
 
 ---
 
@@ -106,8 +209,9 @@ export class RPCClient {
 ```
 
 **Review Points:**
-- [ ] Verify all WSS endpoints are correct and accessible
-- [ ] Confirm port numbers are correct for each network
+- [ ] **P0:** Ensure defaults are PFTL testnet only (remove/gate XRPL networks; default `activeNetwork` is PFTL).
+- [ ] Verify the PFTL WSS endpoint is correct and accessible
+- [ ] Confirm PFTL port numbers are correct
 
 ---
 
@@ -135,6 +239,10 @@ public async changeNode(node: string): Promise<void> {
 ### 4. `.yarnrc.yml`
 - Added npm registry config for @peersyst packages (404 from npm.org)
 - Disabled lifecycle scripts to bypass @lavamoat
+
+**Reviewer Comments:**
+- **P0:** Using `https://registry.npmmirror.com` for a Snap dependency scope needs re-evaluation/approval (supply-chain).
+- `enableScripts: false` can be reasonable (reduces lifecycle-script risk), but the doc should avoid framing this as “bypassing” security controls; confirm how LavaMoat/allow-scripts policy is intended to work in this repo.
 
 ### 5. `package.json` (root)
 - Upgraded prettier from v2 to v3 (required by @metamask/snaps-webpack-plugin)
@@ -174,6 +282,12 @@ public async changeNode(node: string): Promise<void> {
 - [ ] Balance queries work (`account_info`)
 - [ ] Transaction history works (`account_tx`)
 - [ ] Transaction submission works (if testable)
+
+### Security (Snap-Specific)
+- [ ] **P0:** `RPCClient` rejects non-`wss://` node URLs at runtime (defense in depth).
+- [ ] **P0:** Snap defaults to PFTL testnet only (no XRPL endpoints in production configuration).
+- [ ] **P0:** For PFTL, mismatch/absence of `server_info.network_id` fails closed (do not sign/submit without replay protection).
+- [ ] **P0:** Dependency provenance is acceptable for a Snap (avoid non-official registries/mirrors unless explicitly approved).
 
 ### Edge Cases
 - [ ] Network switching properly disconnects/reconnects
