@@ -24,7 +24,7 @@ export var formatNumber = function formatNumber(value, locale, maxDecimals) {
   return formatInt(_int) + (value.includes(".") ? decimalSeparator : "") + dec.substring(0, maxDecimals);
 };
 export var isNumber = function isNumber(str) {
-  return /^-?(?:\d+\.?\d*|\.\d+)$/.test(str);
+  return /^-?(?:\d+\.\d+|\d+|\.\d+)$/.test(str);
 };
 export var parseNumber = function parseNumber(value, maxDecimals) {
   var parsedValue = escapeReplaceAll(value, ",", ".");
