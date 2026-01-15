@@ -1,11 +1,11 @@
 /* eslint-disable */
 /**
  *
- * THIS RPC CLIENT HAS BEEN MODIFIED FROM THE WS CLIENT OF THE xrpl.js LIBRARY
+ * THIS RPC CLIENT USES THE xrpl.js WebSocket Client
  *
  */
+import { Client, type Request as XrplRequest, type SubmittableTransaction, setTransactionFlagsToNumber, ValidationError } from 'xrpl';
 import { XrplResponse } from '../Provider';
-import { type Request as XrplRequest, type SubmittableTransaction, setTransactionFlagsToNumber, ValidationError } from 'xrpl';
 import {
   calculateFeePerTransactionType,
   checkAccountDeleteBlockers,
@@ -52,18 +52,28 @@ export class RPCClient {
   public url: string;
 
   /**
-   * Whether the client is connected to the server
+   * The xrpl.js WebSocket client
    */
-  private isConnected = false;
+  private client: Client;
 
   constructor(url: string) {
     this.url = url;
+    this.client = new Client(url);
     this.feeCushion = DEFAULT_FEE_CUSHION;
     this.maxFeeXRP = DEFAULT_MAX_FEE_XRP;
   }
 
   async connect(): Promise<void> {
+    if (!this.client.isConnected()) {
+      await this.client.connect();
+    }
     await this.getServerInfo();
+  }
+
+  async disconnect(): Promise<void> {
+    if (this.client.isConnected()) {
+      await this.client.disconnect();
+    }
   }
 
   public async getServerInfo(): Promise<void> {
@@ -73,10 +83,8 @@ export class RPCClient {
       });
       this.networkID = response.result.info.network_id ?? undefined;
       this.buildVersion = response.result.info.build_version;
-      this.isConnected = true;
     } catch (error) {
-      this.isConnected = false;
-      // Silent failure - connection status is tracked via isConnected flag
+      // Silent failure - connection status is tracked via client.isConnected()
     }
   }
 
@@ -89,27 +97,25 @@ export class RPCClient {
   }
 
   public async request<Request extends XrplRequest>(req: Request): Promise<XrplResponse<Request>> {
-    const res = await fetch(this.url, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      body: JSON.stringify({
-        method: req.command,
-        params: [req],
-      }),
-    });
-    const resJson: XrplResponse<Request> & { result: { error: string } } = await res.json();
-    if (resJson.result.error) {
-      throw new Error(`Error calling ${req.command} - ${resJson.result.error}`);
+    if (!this.client.isConnected()) {
+      await this.client.connect();
     }
-    return resJson;
+    const response = await this.client.request(req);
+    return response as XrplResponse<Request>;
+  }
+
+  /**
+   * Change the node URL and reconnect
+   */
+  public async changeNode(url: string): Promise<void> {
+    await this.disconnect();
+    this.url = url;
+    this.client = new Client(url);
+    await this.connect();
   }
 
   public async autofill<T extends SubmittableTransaction>(transaction: T, signersCount?: number): Promise<T> {
-    if (!this.isConnected) await this.connect();
+    if (!this.client.isConnected()) await this.connect();
 
     const tx = { ...transaction };
 

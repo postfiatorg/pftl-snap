@@ -26,25 +26,25 @@ export const DEFAULT_NETWORKS: Network[] = [
   {
     chainId: 0,
     name: 'XRPL Mainnet',
-    nodeUrl: 'https://xrplcluster.com',
+    nodeUrl: 'wss://xrplcluster.com',
     explorerUrl: 'https://livenet.xrpl.org',
   },
   {
     chainId: 1,
     name: 'XRPL Testnet',
-    nodeUrl: 'https://testnet.xrpl-labs.com',
+    nodeUrl: 'wss://testnet.xrpl-labs.com',
     explorerUrl: 'https://testnet.xrpl.org',
   },
   {
     chainId: 2,
     name: 'XRPL Devnet',
-    nodeUrl: 'https://s.devnet.rippletest.net:51234',
+    nodeUrl: 'wss://s.devnet.rippletest.net:51233',
     explorerUrl: 'https://devnet.xrpl.org',
   },
   {
     chainId: 2025,
     name: 'PFTL Testnet',
-    nodeUrl: 'https://rpc.testnet.postfiat.org:51234',
+    nodeUrl: 'wss://rpc.testnet.postfiat.org:6007',
     explorerUrl: 'https://explorer.testnet.postfiat.org',
   },
 ];
