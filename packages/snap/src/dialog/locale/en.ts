@@ -3,7 +3,7 @@ export default {
   /**
    * Transaction dialog
    */
-  TransactionHeader: 'Sign The Warp Transaction',
+  TransactionHeader: 'Sign Post Fiat Transaction',
   TransactionSubHeader: 'Got a request from %origin% to sign the following transaction',
   TransactionFooter: '⚠️ Please check that all of the above fields are correct.',
   VerifyCompleteTx: 'Verify the [complete transaction here](%uriTransaction%)',
@@ -100,18 +100,18 @@ export default {
   /**
    * Account dialogs
    */
-  ExtractPrivateKeyHeader: 'The Warp Account Private Key',
+  ExtractPrivateKeyHeader: 'Post Fiat Account Private Key',
   ExtractPrivateKeyRequestHeader: 'Do you want to export your Private Key ?',
   ExtractPrivateKeyRequestBodyStepTitle1: '⚠️ Warning: Understand the Risk',
   ExtractPrivateKeyRequestBodyStepExplanation1:
     'Never disclose this key. Anyone with your private key can steal any assets held in your account.',
   ExtractPrivateKeyRequestBodyStepTitle2: '⚠️ Warning: Be Aware of Irreversibility',
   ExtractPrivateKeyRequestBodyStepExplanation2:
-    'If you lose your private key, nobody can help you, neither The Warp or the MetaMask team.',
+    'If you lose your private key, nobody can help you, neither Post Fiat or the MetaMask team.',
   ExtractPrivateKeyRequestBodyStepTitle3: '⚠️ Warning: Protect Yourself from Scams',
   ExtractPrivateKeyRequestBodyStepExplanation3: 'If anyone, even a support agent, asks for your private key, you are being scammed.',
   // Import Wallet Dialog
-  ImportWalletHeader: 'Import The Warp Wallet',
+  ImportWalletHeader: 'Import Post Fiat Wallet',
   ImportWalletSubHeader: '%origin% wants to import an XRPL wallet',
   ImportWalletAddress: 'Wallet Address: %address%',
   ImportWalletWarning: 'Warning: Make sure you trust this site before importing your wallet.',

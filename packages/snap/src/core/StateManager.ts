@@ -44,7 +44,7 @@ export const DEFAULT_NETWORKS: Network[] = [
   {
     chainId: 2025,
     name: 'PFTL Testnet',
-    nodeUrl: 'https://validator.thewarp.ai/rpc',
+    nodeUrl: 'https://rpc.testnet.postfiat.org:51234',
     explorerUrl: 'https://explorer.testnet.postfiat.org',
   },
 ];
