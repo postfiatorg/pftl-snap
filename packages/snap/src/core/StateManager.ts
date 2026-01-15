@@ -24,24 +24,6 @@ export type State = {
  */
 export const DEFAULT_NETWORKS: Network[] = [
   {
-    chainId: 0,
-    name: 'XRPL Mainnet',
-    nodeUrl: 'wss://xrplcluster.com',
-    explorerUrl: 'https://livenet.xrpl.org',
-  },
-  {
-    chainId: 1,
-    name: 'XRPL Testnet',
-    nodeUrl: 'wss://testnet.xrpl-labs.com',
-    explorerUrl: 'https://testnet.xrpl.org',
-  },
-  {
-    chainId: 2,
-    name: 'XRPL Devnet',
-    nodeUrl: 'wss://s.devnet.rippletest.net:51233',
-    explorerUrl: 'https://devnet.xrpl.org',
-  },
-  {
     chainId: 2025,
     name: 'PFTL Testnet',
     nodeUrl: 'wss://rpc.testnet.postfiat.org:6007',
@@ -68,14 +50,22 @@ export class StateManager {
     const storedState = (await snap.request({
       method: 'snap_manageState',
       params: { operation: 'get' },
-    })) as State;
+    })) as Partial<State> | null;
 
     if (!storedState) {
       return DEFAULT_STATE;
     }
 
-    this.currentState = storedState;
-    return storedState;
+    // Force PFTL-only networks and active network to avoid accidental XRPL connections.
+    const normalizedState: State = {
+      ...DEFAULT_STATE,
+      ...storedState,
+      networks: DEFAULT_NETWORKS,
+      activeNetwork: DEFAULT_NETWORKS[0] as Network,
+    };
+
+    this.currentState = normalizedState;
+    return normalizedState;
   }
 
   async set(newState: Partial<State>): Promise<void> {

@@ -1,3 +1,3 @@
 import BigNumber from 'bignumber.js';
 
-globalThis.BigNumber = BigNumber;
+(globalThis as Record<string, unknown>).BigNumber = BigNumber;

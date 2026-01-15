@@ -17,7 +17,12 @@ function TransakProvider({ children }: TransakProviderProps) {
     if (!walletAddress) {
       return undefined;
     }
-    return new Transak({ ...transakConfig, walletAddress } as TransakConfig);
+    try {
+      return new Transak({ ...transakConfig, walletAddress } as TransakConfig);
+    } catch (error) {
+      console.warn('[TransakProvider] Failed to initialize Transak SDK:', error);
+      return undefined;
+    }
   }, [transakConfig, walletAddress]);
 
   return <TransakContextProvider value={{ transak }}>{children}</TransakContextProvider>;

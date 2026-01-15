@@ -1,0 +1,12 @@
+import _taggedTemplateLiteral from "@babel/runtime/helpers/esm/taggedTemplateLiteral";
+var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6;
+import styled from "styled-components";
+import { Paper } from "../Paper";
+export var PopoverRoot = styled.div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    position: relative;\n    display: flex;\n    width: fit-content;\n    height: fit-content;\n"])));
+export var PopperArrow = styled(Paper)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    --popper-arrow-size: 8px;\n\n    position: absolute;\n    width: var(--popper-arrow-size);\n    height: var(--popper-arrow-size);\n    background: inherit;\n    border: inherit;\n    visibility: hidden;\n\n    &:before {\n        content: \"\";\n        position: absolute;\n        width: var(--popper-arrow-size);\n        height: var(--popper-arrow-size);\n        background: inherit;\n        border: inherit;\n        visibility: visible;\n        transform: rotate(45deg);\n        box-sizing: border-box;\n    }\n"])));
+export var PopoverPaper = styled(Paper)(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral([""])));
+export var PopoverPopper = styled.div(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\n    z-index: ", ";\n\n    &[data-popper-placement^=\"top\"] > ", " ", " {\n        bottom: calc(var(--popper-arrow-size) * -0.4);\n        border-top: 0;\n        border-left: 0;\n    }\n\n    &[data-popper-placement^=\"bottom\"] > ", " ", " {\n        top: calc(var(--popper-arrow-size) * -0.6);\n        border-bottom: 0;\n        border-right: 0;\n    }\n\n    &[data-popper-placement^=\"left\"] > ", " ", " {\n        right: calc(var(--popper-arrow-size) * -0.4);\n        border-bottom: 0;\n        border-left: 0;\n    }\n\n    &[data-popper-placement^=\"right\"] > ", " ", " {\n        left: calc(var(--popper-arrow-size) * -0.6);\n        border-top: 0;\n        border-right: 0;\n    }\n"])), function (p) {
+  return p.theme.zIndex.popover;
+}, PopoverPaper, PopperArrow, PopoverPaper, PopperArrow, PopoverPaper, PopperArrow, PopoverPaper, PopperArrow);
+export var PopoverContent = styled.div(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["\n    position: relative;\n    display: contents;\n    cursor: default;\n"])));
+export var PopoverSnitch = styled.div(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    z-index: -1;\n"])));

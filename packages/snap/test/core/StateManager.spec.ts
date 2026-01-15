@@ -32,21 +32,25 @@ describe('StateManager', () => {
     test('should return the stored state if it exists', async () => {
       const storedState: State = {
         networks: DEFAULT_NETWORKS,
-        activeNetwork: DEFAULT_NETWORKS[1] as Network,
+        activeNetwork: DEFAULT_NETWORKS[0] as Network,
+        importedWallets: [],
+        activeImportedWallet: undefined,
+        derivedWalletAddress: undefined,
       };
       jest.spyOn(snap, 'request').mockResolvedValue(storedState);
 
       const state = await stateManager.get();
 
-      expect(state).toEqual(storedState);
-      expect(stateManager.currentState).toEqual(storedState);
+      expect(state.networks).toEqual(DEFAULT_NETWORKS);
+      expect(state.activeNetwork).toEqual(DEFAULT_NETWORKS[0]);
+      expect(stateManager.currentState).toEqual(state);
     });
   });
 
   describe('set', () => {
     test('should update the state', async () => {
       const newState: Partial<State> = {
-        activeNetwork: DEFAULT_NETWORKS[2],
+        activeNetwork: DEFAULT_NETWORKS[0],
       };
 
       stateManager.currentState = MOCKED_STATE;
@@ -68,12 +72,15 @@ describe('StateManager', () => {
 
     test('should merge the new state with the existing state', async () => {
       const newState: Partial<State> = {
-        activeNetwork: DEFAULT_NETWORKS[2],
+        activeNetwork: DEFAULT_NETWORKS[0],
       };
 
       const existingState: State = {
         networks: DEFAULT_NETWORKS,
-        activeNetwork: DEFAULT_NETWORKS[1] as Network,
+        activeNetwork: DEFAULT_NETWORKS[0] as Network,
+        importedWallets: [],
+        activeImportedWallet: undefined,
+        derivedWalletAddress: undefined,
       };
 
       stateManager.currentState = existingState;

@@ -26,7 +26,7 @@ export type Config = {
   };
   mockedAddress: string;
   fiatDecimals: number;
-  xrplNetwork: Record<'mainnet' | 'testnet' | 'devnet', NetworkReserve>;
+  xrplNetwork: Record<'mainnet' | 'testnet' | 'devnet' | 'pftlTestnet', NetworkReserve>;
   featureFlags: {
     enablePlayground: boolean;
   };
@@ -45,6 +45,7 @@ export type Config = {
     mainnet: string;
     testnet: string;
     devnet: string;
+    pftlTestnet: string;
   };
   backendUrl: string;
   surveyUrl: string;
