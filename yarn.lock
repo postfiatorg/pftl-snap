@@ -4348,7 +4348,7 @@ __metadata:
 
 "@peersyst/react-components-core@file:../vendor/@peersyst/react-components-core::locator=site%40workspace%3Apackages%2Fsite":
   version: 1.7.19
-  resolution: "@peersyst/react-components-core@file:../vendor/@peersyst/react-components-core#../vendor/@peersyst/react-components-core::hash=f74ed2&locator=site%40workspace%3Apackages%2Fsite"
+  resolution: "@peersyst/react-components-core@file:../vendor/@peersyst/react-components-core#../vendor/@peersyst/react-components-core::hash=ab6718&locator=site%40workspace%3Apackages%2Fsite"
   dependencies:
     "@babel/runtime": ^7.16.7
     "@peersyst/react-hooks": ^2.2.15
@@ -4367,7 +4367,7 @@ __metadata:
       optional: true
     "@types/styled-components":
       optional: true
-  checksum: fbdff73c49b9a52d02fff18786addc6944a6935c5203e6c9526b87add2b22f645472f52c978b58f83500a7f5854634b2384b739e32102715b3a40477e1ee67d7
+  checksum: 5e7b1ad7b16635f0ccde9ea2cbd76439dfa689fb87046ceb5909ace87bdb24c85ab81c694df41efa4159654ac29f018db7670a5c601c379d3fd6d40847c09191
   languageName: node
   linkType: hard
 
