@@ -13,7 +13,7 @@ export class TransactionDialog {
     return [heading(translate('TransactionHeader')), text(translate('TransactionSubHeader', { origin }))];
   }
 
-  static buildFooter(transaction: Transaction): Component[] {
+  static buildFooter(_transaction: Transaction): Component[] {
     return [text(translate('TransactionFooter'))];
   }
 

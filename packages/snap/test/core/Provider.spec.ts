@@ -53,12 +53,12 @@ describe('Provider', () => {
     };
     test('Should make a request an return a response', async () => {
       const mockedResponse = { result: 'result' };
-      jest.spyOn(RPCClient.prototype, 'request').mockResolvedValue(mockedResponse as any);
+      const requestSpy = jest.spyOn(RPCClient.prototype, 'request').mockResolvedValue(mockedResponse as any);
 
       const res = await provider.request(req);
 
       expect(res).toEqual(mockedResponse);
-      expect(RPCClient.prototype.request).toHaveBeenCalledWith(req);
+      expect(requestSpy).toHaveBeenCalledWith(req);
     });
 
     test('Should throw an error if the request fails', async () => {
