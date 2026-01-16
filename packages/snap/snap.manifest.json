@@ -7,7 +7,7 @@
     "url": "https://github.com/postfiatorg/pftl-snap.git"
   },
   "source": {
-    "shasum": "54X1+6twNRyYEgWygzpnfYrb1VyOxk3+5i3SLmxev40=",
+    "shasum": "UighHaCseazTCdIP6hjWpwNjZxSTj38zP1mcXIjFnuA=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
@@ -33,5 +33,6 @@
     },
     "endowment:ethereum-provider": {}
   },
+  "platformVersion": "6.22.0",
   "manifestVersion": "0.1"
 }
