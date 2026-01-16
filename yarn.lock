@@ -4461,6 +4461,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pkgr/core@npm:^0.2.9":
+  version: 0.2.9
+  resolution: "@pkgr/core@npm:0.2.9"
+  checksum: bb2fb86977d63f836f8f5b09015d74e6af6488f7a411dcd2bfdca79d76b5a681a9112f41c45bdf88a9069f049718efc6f3900d7f1de66a2ec966068308ae517f
+  languageName: node
+  linkType: hard
+
 "@pmmmwh/react-refresh-webpack-plugin@npm:^0.3.2":
   version: 0.3.3
   resolution: "@pmmmwh/react-refresh-webpack-plugin@npm:0.3.3"
@@ -13379,6 +13386,26 @@ __metadata:
     eslint-config-prettier:
       optional: true
   checksum: 22c29ba685f18516e3b1595e062849ccc108996a759da6067ff5d876519a5f81c8ba92c0c5623a1c62b593d417619ba44ab3b6ec1450ca753c078fd92970b883
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-prettier@npm:^5.0.0":
+  version: 5.5.5
+  resolution: "eslint-plugin-prettier@npm:5.5.5"
+  dependencies:
+    prettier-linter-helpers: ^1.0.1
+    synckit: ^0.11.12
+  peerDependencies:
+    "@types/eslint": ">=8.0.0"
+    eslint: ">=8.0.0"
+    eslint-config-prettier: ">= 7.0.0 <10.0.0 || >=10.1.0"
+    prettier: ">=3.0.0"
+  peerDependenciesMeta:
+    "@types/eslint":
+      optional: true
+    eslint-config-prettier:
+      optional: true
+  checksum: 49b1c25d75ded255a8707d5f06288ae86e8ab4f8e273d4aabdabf73cd0903848916d5a3598ba8be82f2c8dd06769c5e6c172503b3b9cfb2636b6fc23b9c024fb
   languageName: node
   linkType: hard
 
@@ -22549,7 +22576,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier-linter-helpers@npm:^1.0.0":
+"prettier-linter-helpers@npm:^1.0.0, prettier-linter-helpers@npm:^1.0.1":
   version: 1.0.1
   resolution: "prettier-linter-helpers@npm:1.0.1"
   dependencies:
@@ -24326,7 +24353,7 @@ __metadata:
     eslint-plugin-jest: ^27.1.5
     eslint-plugin-jsdoc: ^41.1.2
     eslint-plugin-n: ^15.7.0
-    eslint-plugin-prettier: ^4.2.1
+    eslint-plugin-prettier: ^5.0.0
     eslint-plugin-promise: ^6.1.1
     https-browserify: ^1.0.0
     prettier: ^3
@@ -26271,6 +26298,15 @@ __metadata:
   version: 2.0.17
   resolution: "synchronous-promise@npm:2.0.17"
   checksum: 7b1342c93741f3f92ebde1edf5d6ce8dde2278de948d84e9bd85e232c16c0d77c90c4940f9975be3effcb20f047cfb0f16fa311c3b4e092c22f3bf2889fb0fb4
+  languageName: node
+  linkType: hard
+
+"synckit@npm:^0.11.12":
+  version: 0.11.12
+  resolution: "synckit@npm:0.11.12"
+  dependencies:
+    "@pkgr/core": ^0.2.9
+  checksum: a53fb563d01ba8912a111b883fc3c701e267896ff8273e7aba9001f5f74711e125888f4039e93060795cd416122cf492ae419eb10a6a3e3b00e830917669d2cf
   languageName: node
   linkType: hard
 
