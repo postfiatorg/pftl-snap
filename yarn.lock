@@ -13589,7 +13589,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crypto-browserify@npm:^3.0.0":
+"crypto-browserify@npm:^3.0.0, crypto-browserify@npm:^3.12.1":
   version: 3.12.1
   resolution: "crypto-browserify@npm:3.12.1"
   dependencies:
@@ -27591,7 +27591,9 @@ __metadata:
     babel-jest: ^29.4.1
     babel-plugin-named-exports-order: ^0.0.2
     babel-plugin-styled-components: ^2.0.7
+    buffer: ^6.0.3
     clsx: ^1.2.1
+    crypto-browserify: ^3.12.1
     customize-cra: ^1.0.0
     customize-cra-react-refresh: ^1.1.0
     decimal.js: ^10.4.3
@@ -27607,6 +27609,7 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.30.1
     eslint-plugin-react-hooks: ^4.6.0
+    https-browserify: ^1.0.0
     i18next: ^23.11.5
     identity-obj-proxy: ^3.0.0
     jest: 29.4.1
@@ -27615,6 +27618,7 @@ __metadata:
     openapi-typescript: ^6.1.0
     openapi-typescript-codegen: ^0.23.0
     prettier: ^2.8.3
+    process: ^0.11.10
     prop-types: ^15.8.1
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -27624,10 +27628,13 @@ __metadata:
     react-router-dom: 6.8.0
     react-scripts: ^5.0.1
     react18-json-view: ^0.2.8
+    stream-browserify: ^3.0.0
+    stream-http: ^3.2.0
     styled-components: ^5.3.6
     text-encoding: ^0.7.0
     ts-jest: ^29.0.5
     typescript: ^4.7.4
+    url: ^0.11.4
     web-vitals: ^3.1.1
     webpack: ^5.75.0
     xrpl: 2.13.0
@@ -30145,7 +30152,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url@npm:~0.11.0":
+"url@npm:^0.11.4, url@npm:~0.11.0":
   version: 0.11.4
   resolution: "url@npm:0.11.4"
   dependencies:
