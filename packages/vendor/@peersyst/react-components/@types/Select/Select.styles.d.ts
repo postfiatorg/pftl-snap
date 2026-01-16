@@ -1,0 +1,10 @@
+import { SelectDisplayStyles, SelectDropdownProps, SelectWrapperStyles } from "./Select.types";
+import { SelectItem } from "./SelectItem";
+export declare const SelectRoot: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>;
+export declare const displayBorder: import("styled-components").FlattenInterpolation<import("styled-components").ThemedStyledProps<SelectDisplayStyles, import("styled-components").DefaultTheme>>;
+export declare const SelectDisplayWrapper: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, SelectWrapperStyles, never>;
+export declare const SelectDisplayTrigger: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>;
+export declare const SelectDisplay: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, SelectDisplayStyles, never>;
+export declare const DisplayContent: import("styled-components").StyledComponent<"div", import("styled-components").DefaultTheme, {}, never>;
+export declare const SelectDropdown: import("styled-components").StyledComponent<"span", import("styled-components").DefaultTheme, SelectDropdownProps, never>;
+export declare const ClearItem: import("styled-components").StyledComponent<typeof SelectItem, import("styled-components").DefaultTheme, {}, never>;

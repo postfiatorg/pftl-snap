@@ -1,0 +1,5 @@
+import _taggedTemplateLiteral from "@babel/runtime/helpers/esm/taggedTemplateLiteral";
+var _templateObject, _templateObject2;
+import styled from "styled-components";
+export var TabGroupRoot = styled.div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    display: flex;\n    column-gap: 20px;\n    align-items: center;\n\n    min-width: 100%;\n    max-width: 100%;\n"])));
+export var TabGroupContainer = styled.div(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    position: relative;\n    isolation: isolate;\n\n    display: flex;\n    flex: 1;\n    column-gap: 20px;\n    align-items: center;\n    padding: 10px 0;\n\n    overflow-x: scroll;\n    scroll-behavior: smooth;\n    &::-webkit-scrollbar {\n        display: none;\n    }\n\n    -ms-overflow-style: none;\n    scrollbar-width: none;\n"])));

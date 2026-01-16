@@ -1,0 +1,4 @@
+import _taggedTemplateLiteral from "@babel/runtime/helpers/esm/taggedTemplateLiteral";
+var _templateObject;
+import styled from "styled-components";
+export var ExtendedSvg = styled.svg(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    &:not(.Filled) {\n        * {\n            stroke: none;\n\n            &[fill]:not([fill=\"none\"]) {\n                fill: currentColor;\n            }\n            &[stroke]:not([stroke=\"none\"]) {\n                stroke: currentColor;\n\n                &:not([fill]) {\n                    fill: none;\n                }\n            }\n        }\n    }\n"])));

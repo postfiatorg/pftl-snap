@@ -1,0 +1,38 @@
+import _slicedToArray from "@babel/runtime/helpers/esm/slicedToArray";
+import { useCallback, useState } from "react";
+export default function useFormSubmit(data, onSubmit, onInvalid) {
+  var _useState = useState(false),
+    _useState2 = _slicedToArray(_useState, 2),
+    submitted = _useState2[0],
+    setSubmitted = _useState2[1];
+  var handleSubmit = useCallback(function (action) {
+    if (!submitted) {
+      setSubmitted(true);
+    }
+    var setData = function setData() {
+      var valid = Object.values(data).every(function (v) {
+        return v.valid;
+      });
+      if (valid) {
+        var values = {};
+        Object.entries(data).forEach(function (v) {
+          return values[v[0]] = v[1].value;
+        });
+        onSubmit(values, action);
+      } else onInvalid == null || onInvalid();
+    };
+    try {
+      setImmediate(setData);
+    } catch (e) {
+      try {
+        process.nextTick(setData);
+      } catch (e) {
+        setData();
+      }
+    }
+  }, [data, submitted, onSubmit, onInvalid]);
+  return {
+    submitted: submitted,
+    handleSubmit: handleSubmit
+  };
+}

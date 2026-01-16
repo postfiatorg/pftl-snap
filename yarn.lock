@@ -6268,9 +6268,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@peersyst/react-components-core@npm:^1.7.19":
+"@peersyst/react-components-core@file:./packages/vendor/@peersyst/react-components-core::locator=root%40workspace%3A.":
   version: 1.7.19
-  resolution: "@peersyst/react-components-core@npm:1.7.19"
+  resolution: "@peersyst/react-components-core@file:./packages/vendor/@peersyst/react-components-core#./packages/vendor/@peersyst/react-components-core::hash=ab6718&locator=root%40workspace%3A."
   dependencies:
     "@babel/runtime": ^7.16.7
     "@peersyst/react-hooks": ^2.2.15
@@ -6289,13 +6289,13 @@ __metadata:
       optional: true
     "@types/styled-components":
       optional: true
-  checksum: 5ceed8ad4b20bbc0d698b9a7d02cad48377f0eae7c29c48cc760c71d3d357ce5cd15f59bc9590b454799490008c5e89b128e0ca694a71f833c9ae9cc5d737037
+  checksum: 5e7b1ad7b16635f0ccde9ea2cbd76439dfa689fb87046ceb5909ace87bdb24c85ab81c694df41efa4159654ac29f018db7670a5c601c379d3fd6d40847c09191
   languageName: node
   linkType: hard
 
-"@peersyst/react-components@npm:^3.9.31":
-  version: 3.9.33
-  resolution: "@peersyst/react-components@npm:3.9.33"
+"@peersyst/react-components@file:./packages/vendor/@peersyst/react-components::locator=root%40workspace%3A.":
+  version: 3.9.31
+  resolution: "@peersyst/react-components@file:./packages/vendor/@peersyst/react-components#./packages/vendor/@peersyst/react-components::hash=1b8c22&locator=root%40workspace%3A."
   dependencies:
     "@babel/runtime": ^7.16.7
     "@peersyst/react-components-core": ^1.7.19
@@ -6327,13 +6327,13 @@ __metadata:
       optional: true
     "@types/styled-components":
       optional: true
-  checksum: a208bf3ccfcee613fd03d26b4c086d4b3f85903a55551e0d5ecbe8a3bb449c56a37d789a2f492d361fcfce218c872e0eb4c334f7a1d1520eac981b8bcf53f507
+  checksum: f98d218530f1cd59fde8d4ab2df4ef3d076a17fe488beab8a1f17b415727b45b30061bc64b7e8c65920d3480bf7f560c31dcf384f14c274e41eca139fd1994aa
   languageName: node
   linkType: hard
 
-"@peersyst/react-hooks@npm:^2.2.15":
+"@peersyst/react-hooks@file:./packages/vendor/@peersyst/react-hooks::locator=root%40workspace%3A.":
   version: 2.2.15
-  resolution: "@peersyst/react-hooks@npm:2.2.15"
+  resolution: "@peersyst/react-hooks@file:./packages/vendor/@peersyst/react-hooks#./packages/vendor/@peersyst/react-hooks::hash=9c08b8&locator=root%40workspace%3A."
   dependencies:
     "@babel/runtime": ^7.16.7
     "@peersyst/react-utils": ^2.5.0
@@ -6343,25 +6343,25 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 2ad3b1dba9bf9f1d5795159b26976ef060afdcbc3471e12d048d98beccee701179c1835e382faff161629e86385b81f2c22c5e914b0506270d0f7c1095c6dc3f
+  checksum: bfb78bf4ea981d48330063a598dd94b8a2483ec57b31157d62856433b29b61b3c3918207f8ba4d8f66822e106f4a420e443e5b0474ac23ca8eaa38185c867129
   languageName: node
   linkType: hard
 
-"@peersyst/react-types@npm:^1.6.2":
+"@peersyst/react-types@file:./packages/vendor/@peersyst/react-types::locator=root%40workspace%3A.":
   version: 1.6.2
-  resolution: "@peersyst/react-types@npm:1.6.2"
+  resolution: "@peersyst/react-types@file:./packages/vendor/@peersyst/react-types#./packages/vendor/@peersyst/react-types::hash=f370e9&locator=root%40workspace%3A."
   peerDependencies:
     "@types/react": "*"
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: ff6460c896702d635a4e1ee3dd3f3e967234bb4588e1a66dd9ad56004b0e2d2207f3ae0c824f2fe7c396222649d3b6970dd8071dadfd60913b5231f990968cae
+  checksum: c68de76addefbfc1387358c1c957d32cc023297297fc8b9024294f0d79e69ccd07123c683a8140e349c76d9cdf2e2a3c5c8d2e7e7c4bf176b7403624a16ece2e
   languageName: node
   linkType: hard
 
-"@peersyst/react-utils@npm:^2.5.0":
+"@peersyst/react-utils@file:./packages/vendor/@peersyst/react-utils::locator=root%40workspace%3A.":
   version: 2.5.0
-  resolution: "@peersyst/react-utils@npm:2.5.0"
+  resolution: "@peersyst/react-utils@file:./packages/vendor/@peersyst/react-utils#./packages/vendor/@peersyst/react-utils::hash=f76ef7&locator=root%40workspace%3A."
   dependencies:
     "@babel/runtime": ^7.16.7
     "@peersyst/react-types": ^1.6.2
@@ -6372,7 +6372,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 85e674a1a0a915199c48860807eb6730042047e31ab9a5ed4f535cc160b3723b42349b7fa4f68af2cf30400dbc06437f043f8f925d3068b6a5b7da57e28df22f
+  checksum: d1e30195f41d4b3bf9a3725bab03b6f6fce7b995f7db361297723f0653cf85d431e93df9af405296454a892d240e1a4d9c2ae014c1734815fa67f0c00839b0ab
   languageName: node
   linkType: hard
 
@@ -27554,10 +27554,11 @@ __metadata:
     "@metamask/eslint-config-nodejs": ^12.1.0
     "@metamask/eslint-config-typescript": ^12.1.0
     "@metamask/providers": ^17.0.0
-    "@peersyst/react-components": ^3.9.31
-    "@peersyst/react-components-core": ^1.7.19
-    "@peersyst/react-hooks": ^2.2.15
-    "@peersyst/react-utils": ^2.5.0
+    "@peersyst/react-components": "file:../vendor/@peersyst/react-components"
+    "@peersyst/react-components-core": "file:../vendor/@peersyst/react-components-core"
+    "@peersyst/react-hooks": "file:../vendor/@peersyst/react-hooks"
+    "@peersyst/react-types": "file:../vendor/@peersyst/react-types"
+    "@peersyst/react-utils": "file:../vendor/@peersyst/react-utils"
     "@storybook/addon-actions": ^6.5.16
     "@storybook/addon-essentials": ^6.5.16
     "@storybook/addon-interactions": ^6.5.16

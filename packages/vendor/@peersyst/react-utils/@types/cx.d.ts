@@ -1,0 +1,5 @@
+/**
+ * Accepts classNames as params and merges them into a single className string
+ * @param classes classNames
+ */
+export default function cx(...classes: (string | false | undefined)[]): string;
