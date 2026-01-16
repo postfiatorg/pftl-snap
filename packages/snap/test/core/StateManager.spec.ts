@@ -33,6 +33,7 @@ describe('StateManager', () => {
       const storedState: State = {
         networks: DEFAULT_NETWORKS,
         activeNetwork: DEFAULT_NETWORKS[1] as Network,
+        importedWallets: [],
       };
       jest.spyOn(snap, 'request').mockResolvedValue(storedState);
 
@@ -74,6 +75,7 @@ describe('StateManager', () => {
       const existingState: State = {
         networks: DEFAULT_NETWORKS,
         activeNetwork: DEFAULT_NETWORKS[1] as Network,
+        importedWallets: [],
       };
 
       stateManager.currentState = existingState;
