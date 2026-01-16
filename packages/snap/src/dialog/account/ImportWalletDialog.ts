@@ -9,10 +9,7 @@ export class ImportWalletDialog {
   }
 
   static buildBody(address: string): Component[] {
-    return [
-      text(translate('ImportWalletAddress', { address })),
-      text(translate('ImportWalletWarning')),
-    ];
+    return [text(translate('ImportWalletAddress', { address })), text(translate('ImportWalletWarning'))];
   }
 
   static async prompt(origin: string, address: string): Promise<boolean> {
@@ -21,17 +18,17 @@ export class ImportWalletDialog {
       divider(),
       text(translate('ImportWalletWarning')),
       text(translate('ImportWalletAddress', { address })),
-      text(translate('ImportWalletSubHeader', { origin }))
+      text(translate('ImportWalletSubHeader', { origin })),
     ]);
 
     const response = await snap.request({
       method: 'snap_dialog',
       params: {
         type: 'confirmation',
-        content
-      }
+        content,
+      },
     });
 
     return response === true;
   }
-} 
+}

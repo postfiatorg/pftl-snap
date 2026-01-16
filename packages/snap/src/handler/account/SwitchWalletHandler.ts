@@ -1,14 +1,14 @@
-import { InvalidParamsError } from '@metamask/snaps-sdk';
+import { InvalidParamsError, NodeType } from '@metamask/snaps-sdk';
+
 import type { Context } from '../../core/Context';
 import type { IHandler } from '../IHandler';
-import { NodeType } from '@metamask/snaps-sdk';
 
 export const SwitchWalletMethod = 'xrpl_switchWallet';
 
 export class SwitchWalletHandler implements IHandler<typeof SwitchWalletMethod> {
   constructor(protected readonly context: Context) {}
 
-  async handle(origin: string, params: { address: string }): Promise<{ address: string }> {
+  async handle(_origin: string, params: { address: string }): Promise<{ address: string }> {
     const state = await this.context.stateManager.get();
 
     // Show confirmation dialog
@@ -44,7 +44,7 @@ export class SwitchWalletHandler implements IHandler<typeof SwitchWalletMethod> 
     }
 
     // Find the imported wallet
-    const importedWallet = state.importedWallets.find((w) => w.address === params.address);
+    const importedWallet = state.importedWallets.find((wallet) => wallet.address === params.address);
     if (!importedWallet) {
       throw new InvalidParamsError('Wallet not found');
     }
@@ -58,4 +58,4 @@ export class SwitchWalletHandler implements IHandler<typeof SwitchWalletMethod> 
 
     return { address: importedWallet.address };
   }
-} 
+}

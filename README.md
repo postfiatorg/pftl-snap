@@ -31,7 +31,6 @@ The PFT Ledger for MetaMask is an extension that allows users to interact with t
 
 - **Site Feature Expansion**: Memo transactions, Import Wallet, Switch Wallet, Trust Lines.
 
-
 ## Usage
 
 To use the PFT Ledger, first install it by following these steps:

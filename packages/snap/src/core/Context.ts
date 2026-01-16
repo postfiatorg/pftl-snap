@@ -1,16 +1,18 @@
+/* eslint-disable no-restricted-syntax */
 import { Provider } from './Provider';
 import { StateManager } from './StateManager';
-import { Wallet } from './Wallet';
 import { EncryptionManager } from './utils/encryption';
+import { Wallet } from './Wallet';
 
 export class Context {
-  private _wallet: Wallet;
+  private readonly _wallet: Wallet;
+
   private _activeImportedWallet?: Wallet;
 
   constructor(
     public readonly stateManager: StateManager,
     public readonly provider: Provider,
-    derivedWallet: Wallet
+    derivedWallet: Wallet,
   ) {
     this._wallet = derivedWallet;
   }
@@ -32,7 +34,7 @@ export class Context {
     const derivedWallet = await Wallet.derive();
 
     const context = new Context(stateManager, provider, derivedWallet);
-    
+
     // Store the derived wallet address in state for consistent rehydration
     if (!state.derivedWalletAddress || state.derivedWalletAddress !== derivedWallet.address) {
       await stateManager.set({ derivedWalletAddress: derivedWallet.address });
@@ -40,18 +42,14 @@ export class Context {
 
     // If there's an active imported wallet, initialize it
     if (state.activeImportedWallet) {
-      const importedWallet = state.importedWallets.find(
-        (w) => w.address === state.activeImportedWallet
-      );
+      const importedWallet = state.importedWallets.find((wallet) => wallet.address === state.activeImportedWallet);
       if (importedWallet) {
         try {
-          const decryptedSeed = await EncryptionManager.decryptData(
-            importedWallet.encryptedSeed
-          );
+          const decryptedSeed = await EncryptionManager.decryptData(importedWallet.encryptedSeed);
           context._activeImportedWallet = Wallet.fromSeed(decryptedSeed);
         } catch (error) {
           // Don't throw, just continue without the imported wallet
-          
+
           // Clear the active imported wallet reference in state since we couldn't load it
           await stateManager.set({ activeImportedWallet: undefined });
         }
@@ -68,39 +66,37 @@ export class Context {
     if (!address) {
       // Switch to derived wallet
       this._activeImportedWallet = undefined;
-      
+
       // Update state to explicitly clear the active imported wallet reference
       // and ensure we're tracking the derived wallet address
       const derivedAddress = this.derivedWallet.address;
-      await this.stateManager.set({ 
+      await this.stateManager.set({
         activeImportedWallet: undefined,
-        derivedWalletAddress: derivedAddress 
+        derivedWalletAddress: derivedAddress,
       });
       return;
     }
 
     // Check if this is the derived wallet address
     if (address === this.derivedWallet.address) {
-      // Switch to derived wallet 
+      // Switch to derived wallet
       this._activeImportedWallet = undefined;
-      await this.stateManager.set({ 
+      await this.stateManager.set({
         activeImportedWallet: undefined,
-        derivedWalletAddress: address 
+        derivedWalletAddress: address,
       });
       return;
     }
 
     try {
       const state = await this.stateManager.get();
-      const importedWallet = state.importedWallets.find((w) => w.address === address);
+      const importedWallet = state.importedWallets.find((wallet) => wallet.address === address);
       if (!importedWallet) {
         throw new Error(`Wallet not found for address: ${address}`);
       }
 
-      const decryptedSeed = await EncryptionManager.decryptData(
-        importedWallet.encryptedSeed
-      );
-      
+      const decryptedSeed = await EncryptionManager.decryptData(importedWallet.encryptedSeed);
+
       if (!decryptedSeed) {
         throw new Error('Failed to decrypt seed');
       }
