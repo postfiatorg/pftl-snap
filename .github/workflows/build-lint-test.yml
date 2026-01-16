@@ -31,7 +31,7 @@ jobs:
           node-version-file: '.nvmrc'
       - name: Enable Corepack
         run: corepack enable
-      - run: yarn --immutable --immutable-cache
+      - run: yarn --immutable
       - run: yarn build
       - name: Cache snap build
         uses: actions/cache@v3
@@ -59,7 +59,7 @@ jobs:
           node-version-file: '.nvmrc'
       - name: Enable Corepack
         run: corepack enable
-      - run: yarn --immutable --immutable-cache
+      - run: yarn --immutable
       - run: yarn lint
       - name: Require clean working directory
         shell: bash
