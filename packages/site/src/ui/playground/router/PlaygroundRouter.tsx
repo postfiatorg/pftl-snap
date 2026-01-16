@@ -11,7 +11,8 @@ import SnapPlaygroundPage from '../pages/SnapPlaygroundPage';
 import { PlaygroundRoutes } from './PlaygroundRoutes.types';
 
 export const usePlaygroundRoutes = (): RouteObject[] => {
-  const { enablePlayground } = useConfig('featureFlags');
+  const featureFlags = useConfig('featureFlags') ?? {};
+  const { enablePlayground } = featureFlags as { enablePlayground?: boolean };
 
   if (!enablePlayground) {
     return [];

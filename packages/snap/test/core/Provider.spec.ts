@@ -6,7 +6,7 @@ import { Provider } from '../../src/core/Provider';
 import { RPCClient } from '../../src/core/rpc-client/RpcClient';
 
 describe('Provider', () => {
-  const uri = 'https://s.altnet.rippletest.net:51234';
+  const uri = 'wss://rpc.testnet.postfiat.org:6007';
   let provider: Provider;
 
   beforeEach(() => {
@@ -53,36 +53,28 @@ describe('Provider', () => {
     };
     test('Should make a request an return a response', async () => {
       const mockedResponse = { result: 'result' };
-
-      jest.spyOn(global, 'fetch').mockResolvedValue({
-        json: jest.fn().mockResolvedValue(mockedResponse),
-      } as any);
+      const requestSpy = jest.spyOn(RPCClient.prototype, 'request').mockResolvedValue(mockedResponse as any);
 
       const res = await provider.request(req);
 
       expect(res).toEqual(mockedResponse);
+      expect(requestSpy).toHaveBeenCalledWith(req);
     });
 
     test('Should throw an error if the request fails', async () => {
-      const errorResponse = {
-        result: {
-          error: 'actNotFound',
-        },
-      };
+      jest.spyOn(RPCClient.prototype, 'request').mockRejectedValue(new Error('boom'));
 
-      jest.spyOn(global, 'fetch').mockResolvedValue({
-        json: jest.fn().mockResolvedValue(errorResponse),
-      } as any);
-
-      await expect(provider.request(req)).rejects.toThrow(new InternalError('Error calling account_info - actNotFound'));
+      await expect(provider.request(req)).rejects.toThrow(new InternalError('boom'));
     });
   });
 
   describe('Changes node correctly', () => {
     test('Changes the node correctly', async () => {
       expect(provider.node).toEqual(uri);
-      await provider.changeNode('newNode');
-      expect(provider.node).toEqual('newNode');
+      jest.spyOn(RPCClient.prototype, 'changeNode').mockResolvedValue(undefined);
+      const newNode = 'wss://rpc.testnet.postfiat.org:6007/';
+      await provider.changeNode(newNode);
+      expect(provider.node).toEqual(newNode);
     });
   });
 });

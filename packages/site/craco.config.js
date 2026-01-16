@@ -27,6 +27,7 @@ module.exports = {
                         http: require.resolve("stream-http"),
                         url: require.resolve("url/"),
                         buffer: require.resolve("buffer"),
+                        vm: false,
                     },
                 },
                 plugins: [

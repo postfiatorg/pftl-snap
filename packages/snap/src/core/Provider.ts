@@ -40,5 +40,6 @@ export class Provider {
 
   public async changeNode(node: string): Promise<void> {
     this.node = node;
+    await this.rpcClient.changeNode(node);
   }
 }

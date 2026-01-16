@@ -13537,7 +13537,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"crypto-browserify@npm:^3.0.0":
+"crypto-browserify@npm:^3.0.0, crypto-browserify@npm:^3.12.1":
   version: 3.12.1
   resolution: "crypto-browserify@npm:3.12.1"
   dependencies:
@@ -26873,6 +26873,8 @@ __metadata:
     "@metamask/eslint-config-typescript": ^12.1.0
     "@typescript-eslint/eslint-plugin": ^5.42.1
     "@typescript-eslint/parser": ^5.42.1
+    buffer: ^6.0.3
+    crypto-browserify: ^3.12.1
     eslint: ^8.45.0
     eslint-config-prettier: ^8.5.0
     eslint-plugin-import: ~2.26.0
@@ -26881,10 +26883,15 @@ __metadata:
     eslint-plugin-n: ^15.7.0
     eslint-plugin-prettier: ^5.0.0
     eslint-plugin-promise: ^6.1.1
+    https-browserify: ^1.0.0
     prettier: ^3.0.0
     prettier-plugin-packagejson: ^2.2.18
+    process: ^0.11.10
     sharp: ^0.32.6
+    stream-browserify: ^3.0.0
+    stream-http: ^3.2.0
     typescript: ^4.7.4
+    url: ^0.11.4
   languageName: unknown
   linkType: soft
 
@@ -30336,7 +30343,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url@npm:~0.11.0":
+"url@npm:^0.11.4, url@npm:~0.11.0":
   version: 0.11.4
   resolution: "url@npm:0.11.4"
   dependencies:
