@@ -13,7 +13,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
+      - name: Enable Corepack
+        run: corepack enable
       - name: Install Yarn dependencies
         run: yarn --immutable
 
@@ -28,8 +29,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-      - run: yarn --immutable --immutable-cache
+      - name: Enable Corepack
+        run: corepack enable
+      - run: yarn --immutable
       - run: yarn build
       - name: Cache snap build
         uses: actions/cache@v3
@@ -55,8 +57,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-      - run: yarn --immutable --immutable-cache
+      - name: Enable Corepack
+        run: corepack enable
+      - run: yarn --immutable
       - run: yarn lint
       - name: Require clean working directory
         shell: bash
@@ -78,7 +81,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
+      - name: Enable Corepack
+        run: corepack enable
       - name: Restore snap build cache
         uses: actions/cache@v3
         with:

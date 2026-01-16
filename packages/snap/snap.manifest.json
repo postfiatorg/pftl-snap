@@ -7,7 +7,7 @@
     "url": "https://github.com/postfiatorg/pftl-snap.git"
   },
   "source": {
-    "shasum": "54X1+6twNRyYEgWygzpnfYrb1VyOxk3+5i3SLmxev40=",
+    "shasum": "o6qahJBheaEs4xZXT5hRCecQdNDdBKYaXH9rcu1TT9Y=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
@@ -28,10 +28,8 @@
     "snap_getEntropy": {},
     "endowment:network-access": {},
     "endowment:rpc": {
-      "dapps": true,
-      "snaps": true
-    },
-    "endowment:ethereum-provider": {}
+      "dapps": true
+    }
   },
   "platformVersion": "6.22.0",
   "manifestVersion": "0.1"
