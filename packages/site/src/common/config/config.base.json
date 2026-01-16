@@ -1,5 +1,5 @@
 {
-  "projectName": "The Warp",
+  "projectName": "Post Fiat",
   "publicUrl": "/",
   "maxNumberDecimals": 15,
   "nativeToken": "nativeToken",
@@ -67,7 +67,7 @@
     "mainnet": "wss://s2.ripple.com/",
     "testnet": "wss://s.altnet.rippletest.net:51233/",
     "devnet": "wss://s.devnet.rippletest.net:51233/",
-    "pftlTestnet": "wss://5.161.223.30:6005"
+    "pftlTestnet": "wss://rpc.testnet.postfiat.org:6007"
   },
   "backendUrl": "https://xrpl-snap-giveaway.peersyst.tech",
   "surveyUrl": "https://gleam.io/4mkf3/xrpl-metamask-snap-10000-xrp-early-adopter-campaign"

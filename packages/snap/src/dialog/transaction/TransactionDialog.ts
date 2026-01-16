@@ -3,7 +3,6 @@ import { DialogType, divider, heading, MethodNotSupportedError, panel, text } fr
 import { type Transaction } from 'xrpl';
 
 import { translate } from '../locale/translate';
-import { ReviewTransactionComponent } from './TransactionComponents';
 import type { ITransactionDialogStrategiesFactory } from './TransactionDialogStrategies/TransactionDialogStrategies.types';
 import { TransactionDialogStrategyFactory } from './TransactionDialogStrategies/TransactionDialogStrategyFactory';
 
@@ -15,7 +14,7 @@ export class TransactionDialog {
   }
 
   static buildFooter(transaction: Transaction): Component[] {
-    return [text(translate('TransactionFooter')), ...ReviewTransactionComponent(transaction)];
+    return [text(translate('TransactionFooter'))];
   }
 
   static async prompt(origin: string, transaction: Transaction): Promise<boolean> {

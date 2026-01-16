@@ -1,11 +1,11 @@
 /* eslint-disable */
 /**
  *
- * THIS RPC CLIENT HAS BEEN MODIFIED FROM THE WS CLIENT OF THE xrpl.js LIBRARY
+ * THIS RPC CLIENT USES THE xrpl.js WebSocket Client
  *
  */
-import { XrplResponse } from '../Provider';
-import { type Request as XrplRequest, type SubmittableTransaction, setTransactionFlagsToNumber, ValidationError } from 'xrpl';
+import { Client, type Request as XrplRequest, type SubmittableTransaction, setTransactionFlagsToNumber, ValidationError } from 'xrpl';
+import type { XrplResponse } from '../Provider';
 import {
   calculateFeePerTransactionType,
   checkAccountDeleteBlockers,
@@ -18,6 +18,42 @@ import { areAmountsEqual } from './utils/areAmountsEqual';
 
 const DEFAULT_FEE_CUSHION = 1.2;
 const DEFAULT_MAX_FEE_XRP = '2';
+
+const ALLOWED_PFTL_RPC_URLS = new Set(['wss://rpc.testnet.postfiat.org:6007']);
+const EXPECTED_PFTL_NETWORK_ID = 2025;
+
+function normalizeAndValidateRpcUrl(url: string): string {
+  let parsed: URL;
+  try {
+    parsed = new URL(url);
+  } catch {
+    throw new Error('Invalid RPC URL');
+  }
+
+  if (parsed.protocol !== 'wss:') {
+    throw new Error('RPC URL must use wss://');
+  }
+
+  if (parsed.username || parsed.password) {
+    throw new Error('RPC URL must not include credentials');
+  }
+
+  if (parsed.search || parsed.hash) {
+    throw new Error('RPC URL must not include query or hash');
+  }
+
+  // Only allow origin-style URLs (no extra path segments).
+  if (parsed.pathname && parsed.pathname !== '/') {
+    throw new Error('RPC URL must not include a path');
+  }
+
+  const normalized = `${parsed.protocol}//${parsed.host}`;
+  if (!ALLOWED_PFTL_RPC_URLS.has(normalized)) {
+    throw new Error('RPC URL is not in the allowlist');
+  }
+
+  return normalized;
+}
 
 export class RPCClient {
   /**
@@ -52,32 +88,51 @@ export class RPCClient {
   public url: string;
 
   /**
-   * Whether the client is connected to the server
+   * The xrpl.js WebSocket client
    */
-  private isConnected = false;
+  private client: Client;
 
   constructor(url: string) {
-    this.url = url;
+    this.url = normalizeAndValidateRpcUrl(url);
+    this.client = new Client(this.url);
     this.feeCushion = DEFAULT_FEE_CUSHION;
     this.maxFeeXRP = DEFAULT_MAX_FEE_XRP;
   }
 
   async connect(): Promise<void> {
+    if (!this.client.isConnected()) {
+      await this.client.connect();
+    }
     await this.getServerInfo();
   }
 
-  public async getServerInfo(): Promise<void> {
-    try {
-      const response = await this.request({
-        command: 'server_info',
-      });
-      this.networkID = response.result.info.network_id ?? undefined;
-      this.buildVersion = response.result.info.build_version;
-      this.isConnected = true;
-    } catch (error) {
-      this.isConnected = false;
-      // Silent failure - connection status is tracked via isConnected flag
+  async disconnect(): Promise<void> {
+    if (this.client.isConnected()) {
+      await this.client.disconnect();
     }
+  }
+
+  public async getServerInfo(): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- xrpl Client types don't narrow well across request unions
+    const response: any = await this.client.request({ command: 'server_info' } as any);
+
+    const networkId = response?.result?.info?.network_id;
+    const buildVersion = response?.result?.info?.build_version;
+
+    if (typeof networkId !== 'number') {
+      throw new Error('RPC server did not provide a valid network_id');
+    }
+
+    if (networkId !== EXPECTED_PFTL_NETWORK_ID) {
+      throw new Error(`Unexpected network_id ${networkId} (expected ${EXPECTED_PFTL_NETWORK_ID})`);
+    }
+
+    if (typeof buildVersion !== 'string' || !buildVersion) {
+      throw new Error('RPC server did not provide a valid build_version');
+    }
+
+    this.networkID = networkId;
+    this.buildVersion = buildVersion;
   }
 
   async getLedgerIndex(): Promise<number> {
@@ -89,27 +144,29 @@ export class RPCClient {
   }
 
   public async request<Request extends XrplRequest>(req: Request): Promise<XrplResponse<Request>> {
-    const res = await fetch(this.url, {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      redirect: 'follow',
-      body: JSON.stringify({
-        method: req.command,
-        params: [req],
-      }),
-    });
-    const resJson: XrplResponse<Request> & { result: { error: string } } = await res.json();
-    if (resJson.result.error) {
-      throw new Error(`Error calling ${req.command} - ${resJson.result.error}`);
+    if (!this.client.isConnected()) {
+      await this.connect();
     }
-    return resJson;
+    // Ensure server info is loaded/validated even if the client was already connected.
+    if (this.networkID == null || this.buildVersion == null) {
+      await this.getServerInfo();
+    }
+    const response = await this.client.request(req);
+    return response as unknown as XrplResponse<Request>;
+  }
+
+  /**
+   * Change the node URL and reconnect
+   */
+  public async changeNode(url: string): Promise<void> {
+    await this.disconnect();
+    this.url = normalizeAndValidateRpcUrl(url);
+    this.client = new Client(this.url);
+    await this.connect();
   }
 
   public async autofill<T extends SubmittableTransaction>(transaction: T, signersCount?: number): Promise<T> {
-    if (!this.isConnected) await this.connect();
+    if (!this.client.isConnected()) await this.connect();
 
     const tx = { ...transaction };
 
@@ -134,19 +191,19 @@ export class RPCClient {
     }
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- ignore type-assertions on the DeliverMax property
-    // @ts-expect-error -- DeliverMax property exists only at the RPC level, not at the protocol level
+    // @ts-ignore -- DeliverMax property exists only at the RPC level, not at the protocol level
     if (tx.TransactionType === 'Payment' && tx.DeliverMax != null) {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- This is a valid null check for Amount
       if (tx.Amount == null) {
         // If only DeliverMax is provided, use it to populate the Amount field
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- ignore type-assertions on the DeliverMax property
-        // @ts-expect-error -- DeliverMax property exists only at the RPC level, not at the protocol level
+        // @ts-ignore -- DeliverMax property exists only at the RPC level, not at the protocol level
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- DeliverMax is a known RPC-level property
         tx.Amount = tx.DeliverMax;
       }
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- ignore type-assertions on the DeliverMax property
-      // @ts-expect-error -- DeliverMax property exists only at the RPC level, not at the protocol level
+      // @ts-ignore -- DeliverMax property exists only at the RPC level, not at the protocol level
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- This is a valid null check for Amount
       if (tx.Amount != null && !areAmountsEqual(tx.Amount, tx.DeliverMax)) {
         return Promise.reject(
@@ -155,7 +212,7 @@ export class RPCClient {
       }
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment -- ignore type-assertions on the DeliverMax property
-      // @ts-expect-error -- DeliverMax property exists only at the RPC level, not at the protocol level
+      // @ts-ignore -- DeliverMax property exists only at the RPC level, not at the protocol level
       delete tx.DeliverMax;
     }
 

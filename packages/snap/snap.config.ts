@@ -10,6 +10,7 @@ const config: SnapConfig = {
   stats: {
     verbose: false,
   },
+  evaluate: false,
 };
 
 export default config;
