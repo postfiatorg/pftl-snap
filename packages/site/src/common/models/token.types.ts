@@ -11,4 +11,4 @@ export interface TrustLineParams {
   issuer: string;
   currency: string;
   limit: number;
-} 
+}

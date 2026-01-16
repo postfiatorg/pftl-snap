@@ -1,6 +1,6 @@
+import { TextField } from '@peersyst/react-components';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { TextField } from '@peersyst/react-components';
 
 const WalletManager: React.FC = () => {
   const { t } = useTranslation();
@@ -15,10 +15,11 @@ const WalletManager: React.FC = () => {
     }));
   };
 
-  const handleImportWallet = async () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _handleImportWallet = async () => {
     try {
       const { privateKey } = formData;
-      if (!privateKey || !privateKey.startsWith('s')) {
+      if (!privateKey?.startsWith('s')) {
         throw new Error('Invalid family seed format. Must start with "s"');
       }
 
@@ -30,10 +31,10 @@ const WalletManager: React.FC = () => {
           request: {
             method: 'xrpl_importWallet',
             params: {
-              seed: privateKey
-            }
-          }
-        }
+              seed: privateKey,
+            },
+          },
+        },
       });
       console.log('Import wallet response:', response);
       // ... rest of the function
@@ -57,4 +58,4 @@ const WalletManager: React.FC = () => {
   );
 };
 
-export default WalletManager; 
+export default WalletManager;

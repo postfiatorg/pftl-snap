@@ -1,10 +1,10 @@
 import { InvalidParamsError, UserRejectedRequestError } from '@metamask/snaps-sdk';
 
 import type { Context } from '../../core/Context';
+import { EncryptionManager } from '../../core/utils/encryption';
 import { Wallet } from '../../core/Wallet';
 import { ImportWalletDialog } from '../../dialog/account/ImportWalletDialog';
 import type { IHandler } from '../IHandler';
-import { EncryptionManager } from '../../core/utils/encryption';
 
 export const ImportWalletMethod = 'xrpl_importWallet';
 
@@ -17,7 +17,7 @@ export class ImportWalletHandler implements IHandler<typeof ImportWalletMethod> 
     }
 
     // Convert privateKey parameter to seed if provided
-    const seed = params.seed || params.privateKey;
+    const seed = params.seed ?? params.privateKey;
     if (!seed) {
       throw new InvalidParamsError('Family seed must be provided');
     }
@@ -40,7 +40,7 @@ export class ImportWalletHandler implements IHandler<typeof ImportWalletMethod> 
 
     // Get current state and check if wallet already exists
     const state = await this.context.stateManager.get();
-    const walletExists = state.importedWallets.some((w) => w.address === wallet.address);
+    const walletExists = state.importedWallets.some((imported) => imported.address === wallet.address);
     if (walletExists) {
       throw new InvalidParamsError('Wallet already imported');
     }
@@ -62,4 +62,4 @@ export class ImportWalletHandler implements IHandler<typeof ImportWalletMethod> 
 
     return { address: wallet.address };
   }
-} 
+}

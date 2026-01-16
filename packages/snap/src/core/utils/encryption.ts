@@ -1,5 +1,7 @@
+/* eslint-disable no-restricted-globals, no-useless-catch, no-restricted-syntax, @typescript-eslint/restrict-plus-operands */
 /**
  * Encryption utility for sensitive data in the XRPL Snap
+ * Note: crypto global is available in the MetaMask Snap environment
  */
 export class EncryptionManager {
   /**
@@ -31,13 +33,7 @@ export class EncryptionManager {
 
       // Convert entropy to a proper key using hex decoding
       const entropyBytes = this.hexToBytes(entropy);
-      const keyMaterial = await crypto.subtle.importKey(
-        'raw',
-        entropyBytes,
-        { name: 'PBKDF2' },
-        false,
-        ['deriveKey']
-      );
+      const keyMaterial = await crypto.subtle.importKey('raw', entropyBytes, { name: 'PBKDF2' }, false, ['deriveKey']);
 
       const salt = crypto.getRandomValues(new Uint8Array(16));
       const key = await crypto.subtle.deriveKey(
@@ -50,7 +46,7 @@ export class EncryptionManager {
         keyMaterial,
         { name: 'AES-GCM', length: 256 },
         false,
-        ['encrypt']
+        ['encrypt'],
       );
 
       const iv = crypto.getRandomValues(new Uint8Array(12));
@@ -61,7 +57,7 @@ export class EncryptionManager {
           iv,
         },
         key,
-        encoder.encode(data)
+        encoder.encode(data),
       );
 
       // Combine salt, iv, and encrypted content
@@ -72,7 +68,7 @@ export class EncryptionManager {
 
       // Convert to hex string
       const result = Array.from(encryptedArray)
-        .map(b => b.toString(16).padStart(2, '0'))
+        .map((b) => b.toString(16).padStart(2, '0'))
         .join('');
       return result;
     } catch (error) {
@@ -95,9 +91,7 @@ export class EncryptionManager {
       });
 
       // Convert hex string back to Uint8Array
-      const encryptedArray = new Uint8Array(
-        encryptedHex.match(/.{1,2}/g)?.map(byte => parseInt(byte, 16)) || []
-      );
+      const encryptedArray = new Uint8Array(encryptedHex.match(/.{1,2}/gu)?.map((byte) => parseInt(byte, 16)) ?? []);
 
       // Extract salt, iv, and encrypted content
       const salt = encryptedArray.slice(0, 16);
@@ -106,13 +100,7 @@ export class EncryptionManager {
 
       // Recreate the key using hex decoding
       const entropyBytes = this.hexToBytes(entropy);
-      const keyMaterial = await crypto.subtle.importKey(
-        'raw',
-        entropyBytes,
-        { name: 'PBKDF2' },
-        false,
-        ['deriveKey']
-      );
+      const keyMaterial = await crypto.subtle.importKey('raw', entropyBytes, { name: 'PBKDF2' }, false, ['deriveKey']);
 
       const key = await crypto.subtle.deriveKey(
         {
@@ -124,7 +112,7 @@ export class EncryptionManager {
         keyMaterial,
         { name: 'AES-GCM', length: 256 },
         false,
-        ['decrypt']
+        ['decrypt'],
       );
 
       const decryptedContent = await crypto.subtle.decrypt(
@@ -133,7 +121,7 @@ export class EncryptionManager {
           iv,
         },
         key,
-        encryptedContent
+        encryptedContent,
       );
 
       const result = new TextDecoder().decode(decryptedContent);

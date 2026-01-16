@@ -8,8 +8,8 @@ import { ChangeNetworkHandler, ChangeNetworkMethod } from './network/ChangeNetwo
 import { GetActiveNetworkHandler, GetActiveNetworkMethod } from './network/GetActiveNetworkHandler';
 import { GetStoredNetworksHandler, GetStoredNetworksMethod } from './network/GetStoredNetworksHandler';
 import { RequestHandler, RequestMethod } from './network/RequestHandler';
-import { SignHandler, SignMethod } from './transaction/SignHandler';
 import { SignAndSubmitHandler, SignAndSubmitMethod } from './transaction/SignAndSubmitHandler';
+import { SignHandler, SignMethod } from './transaction/SignHandler';
 import { SignMessageHandler, SignMessageMethod } from './transaction/SignMessageHandler';
 
 export const HandlerFactory = (context: Context) => ({

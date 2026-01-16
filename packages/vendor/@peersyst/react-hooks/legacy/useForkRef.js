@@ -1,0 +1,18 @@
+import { setRef } from "@peersyst/react-utils";
+import { useMemo } from "react";
+export default function useForkRef(refA, refB) {
+  /**
+   * This will create a new function if the ref props change and are defined.
+   * This means react will call the old forkRef with `null` and the new forkRef
+   * with the ref. Cleanup naturally emerges from this behavior.
+   */
+  return useMemo(function () {
+    if (refA == null && refB == null) {
+      return null;
+    }
+    return function (refValue) {
+      setRef(refA, refValue);
+      setRef(refB, refValue);
+    };
+  }, [refA, refB]);
+}

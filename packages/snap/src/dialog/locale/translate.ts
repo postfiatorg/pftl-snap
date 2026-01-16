@@ -15,7 +15,7 @@ const locales = {
 export type LocaleKey = keyof typeof en;
 
 export const translate = (key: LocaleKey, vars: Record<string, string> = {}, locale = 'en'): string => {
-  let value = (locales[locale as keyof typeof locales] || locales[DEFAULT_LOCALE])[key];
+  let value: string = (locales[locale as keyof typeof locales] || locales[DEFAULT_LOCALE])[key];
   for (const variable of Object.keys(vars)) {
     value = value.replace(`%${variable}%`, vars[variable] ?? '');
   }

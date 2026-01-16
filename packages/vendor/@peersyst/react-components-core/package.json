@@ -1,0 +1,42 @@
+{
+  "name": "@peersyst/react-components-core",
+  "author": "Peersyst",
+  "version": "1.7.19",
+  "license": "MIT",
+  "main": "./node/index.js",
+  "engines": {
+    "node": ">=10"
+  },
+  "peerDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-dom": {
+      "optional": true
+    },
+    "@types/styled-components": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.16.7",
+    "@peersyst/react-hooks": "^2.2.15",
+    "@peersyst/react-types": "^1.6.2",
+    "@peersyst/react-utils": "^2.5.0",
+    "validator": "^13.7.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "gitHead": "53facea43af580b519df37772bd6aa44b90a07d6",
+  "private": false,
+  "module": "./esm/index.js",
+  "types": "./@types/index.d.ts"
+}

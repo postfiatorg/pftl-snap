@@ -9,7 +9,11 @@ import { bip44CompressedPublicKeyToXRPPublicKey, bip44PrivateKeyToXRPPrivateKey 
 export class Wallet {
   private readonly _wallet: XrplWallet;
 
-  constructor(private readonly _address: string, private readonly _publicKey: string, private readonly _privateKey: string) {
+  constructor(
+    private readonly _address: string,
+    private readonly _publicKey: string,
+    private readonly _privateKey: string,
+  ) {
     this._wallet = new XrplWallet(_publicKey, _privateKey);
   }
 
@@ -70,8 +74,8 @@ export class Wallet {
       }
 
       // Remove any prefixes if present and ensure uppercase
-      const cleanPrivateKey = privateKey.replace(/^(?:00|s)/, '').toUpperCase();
-      
+      const cleanPrivateKey = privateKey.replace(/^(?:00|s)/u, '').toUpperCase();
+
       try {
         // First try to treat it as a seed without the 's' prefix
         const keypair = deriveKeypair(`s${cleanPrivateKey}`);
@@ -99,12 +103,10 @@ export class Wallet {
   public static fromSeed(seed: string): Wallet {
     try {
       // Validate and clean the seed
-      if (!seed.startsWith('s')) {
-        seed = `s${seed}`;
-      }
+      const formattedSeed = seed.startsWith('s') ? seed : `s${seed}`;
 
       // Generate keypair from seed
-      const keypair = deriveKeypair(seed);
+      const keypair = deriveKeypair(formattedSeed);
       const address = deriveAddress(keypair.publicKey);
 
       return new Wallet(address, keypair.publicKey, keypair.privateKey);

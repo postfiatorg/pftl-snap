@@ -1,0 +1,31 @@
+{
+  "name": "@peersyst/react-hooks",
+  "author": "Peersyst",
+  "version": "2.2.15",
+  "license": "MIT",
+  "main": "./node/index.js",
+  "engines": {
+    "node": ">=10"
+  },
+  "peerDependencies": {
+    "@types/react": "^18.0.0",
+    "react": "^18.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.16.7",
+    "@peersyst/react-utils": "^2.5.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "gitHead": "0f5fa4d8b97b14e7f8aae6219a2f8c7615eaa1a1",
+  "private": false,
+  "module": "./esm/index.js",
+  "types": "./@types/index.d.ts"
+}

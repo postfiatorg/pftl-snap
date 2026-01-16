@@ -1,0 +1,58 @@
+{
+  "name": "@peersyst/react-components",
+  "author": "Peersyst",
+  "version": "3.9.31",
+  "license": "MIT",
+  "main": "./node/index.js",
+  "engines": {
+    "node": ">=10"
+  },
+  "peerDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/styled-components": "^5.1.18",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "styled-components": "^5.3.3"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    },
+    "@types/react-dom": {
+      "optional": true
+    },
+    "@types/styled-components": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.16.7",
+    "@peersyst/react-components-core": "^1.7.19",
+    "@peersyst/react-hooks": "^2.2.15",
+    "@peersyst/react-types": "^1.6.2",
+    "@peersyst/react-utils": "^2.5.0",
+    "@popperjs/core": "^2.11.5",
+    "@tanstack/react-table": "^8.7.9",
+    "clsx": "^1.2.1",
+    "color": "^4.2.3",
+    "highcharts": "^9.3.2",
+    "highcharts-react-official": "^3.1.0",
+    "prop-types": "^15.8.1",
+    "react-click-away-listener": "^2.0.5",
+    "react-multi-carousel": "^2.6.5",
+    "react-player": "^2.9.0",
+    "react-transition-group": "^4.4.2"
+  },
+  "resolutions": {
+    "styled-components": "^5"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "gitHead": "371daf52004452cd65eaf1100906bf8e38a87818",
+  "private": false,
+  "module": "./esm/index.js",
+  "types": "./@types/index.d.ts"
+}

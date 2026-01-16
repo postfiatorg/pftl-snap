@@ -1,0 +1,24 @@
+{
+  "name": "@peersyst/react-types",
+  "author": "Peersyst",
+  "version": "1.6.2",
+  "license": "MIT",
+  "types": "./index.d.ts",
+  "engines": {
+    "node": ">=10"
+  },
+  "peerDependencies": {
+    "@types/react": "*"
+  },
+  "peerDependenciesMeta": {
+    "@types/react": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "sideEffects": false,
+  "gitHead": "0f5fa4d8b97b14e7f8aae6219a2f8c7615eaa1a1",
+  "private": false
+}
