@@ -7,8 +7,11 @@ import { Label } from '../../../src/dialog/transaction/TransactionComponents/bas
 describe('SignMessageDialog', () => {
   const origin = 'mockOrigin';
   const message = 'mockMessage';
+  const hexMessage = '0x48656c6c6f';
+  const decodedHexMessage = 'Hello';
   const headerResult = [heading(translate('SignMessageHeader')), text(translate('SignMessageSubHeader', { origin }))];
   const bodyResult = [Label('SignMessage'), copyable(message)];
+  const hexBodyResult = [Label('SignMessageDecoded'), copyable(decodedHexMessage), Label('SignMessageHex'), copyable(hexMessage)];
   const footerResult = [text(translate('SignMessageFooter'))];
 
   describe('BuildHeader', () => {
@@ -20,10 +23,16 @@ describe('SignMessageDialog', () => {
   });
 
   describe('BuildBody', () => {
-    test('Builds body correctly', () => {
+    test('Builds body correctly for plain text', () => {
       const result = SignMessageDialog.buildBody(message);
 
       expect(result).toEqual(bodyResult);
+    });
+
+    test('Builds body correctly for hex message', () => {
+      const result = SignMessageDialog.buildBody(hexMessage);
+
+      expect(result).toEqual(hexBodyResult);
     });
   });
 

@@ -2,7 +2,14 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "@metamask/snaps-sdk": [
+        "../../node_modules/@metamask/snaps-sdk/dist/index.d.cts"
+      ]
+    },
     "noImplicitAny": false
   },
-  "include": ["**/*.ts"]
+  "include": [
+    "**/*.ts"
+  ]
 }
