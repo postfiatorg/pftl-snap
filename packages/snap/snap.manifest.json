@@ -7,7 +7,7 @@
     "url": "https://github.com/postfiatorg/pftl-snap.git"
   },
   "source": {
-    "shasum": "ZeN8biGRUO0InHTZq6GzigBGVghiu3VUDNryagut/vw=",
+    "shasum": "eCDswMalLXDK9sMe55w4dLa1a9uqERlB1+Cd5RQLfFY=",
     "location": {
       "npm": {
         "filePath": "dist/bundle.js",
