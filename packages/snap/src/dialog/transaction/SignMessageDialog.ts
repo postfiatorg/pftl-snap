@@ -1,8 +1,40 @@
 import type { Component } from '@metamask/snaps-sdk';
 import { copyable, divider, heading, panel, text } from '@metamask/snaps-sdk';
 
+import { removeHexPreffix } from '../../core/utils/wallet-utils';
 import { translate } from '../locale/translate';
 import { Label } from './TransactionComponents/base/base';
+import { convertHexToString, isHex } from './TransactionComponents/utils/hex';
+
+const containsControlCharacters = (value: string): boolean => {
+  for (let i = 0; i < value.length; i += 1) {
+    const codePoint = value.charCodeAt(i);
+    if ((codePoint >= 0 && codePoint <= 8) || codePoint === 11 || codePoint === 12) {
+      return true;
+    }
+    if ((codePoint >= 14 && codePoint <= 31) || codePoint === 127) {
+      return true;
+    }
+  }
+  return false;
+};
+
+const decodeHexMessage = (message: string): { decoded: string; hexMessage: string } | null => {
+  const normalizedHex = removeHexPreffix(message);
+  if (!normalizedHex || normalizedHex.length % 2 !== 0 || !isHex(normalizedHex)) {
+    return null;
+  }
+
+  try {
+    const decoded = convertHexToString(normalizedHex);
+    if (!decoded || containsControlCharacters(decoded)) {
+      return null;
+    }
+    return { decoded, hexMessage: message };
+  } catch {
+    return null;
+  }
+};
 
 export class SignMessageDialog {
   static buildHeader(origin: string): Component[] {
@@ -14,7 +46,12 @@ export class SignMessageDialog {
   }
 
   static buildBody(message: string): Component[] {
-    return [Label('SignMessage'), copyable(message)];
+    const decodedMessage = decodeHexMessage(message);
+    if (!decodedMessage) {
+      return [Label('SignMessage'), copyable(message)];
+    }
+
+    return [Label('SignMessageDecoded'), copyable(decodedMessage.decoded), Label('SignMessageHex'), copyable(decodedMessage.hexMessage)];
   }
 
   static async prompt(origin: string, message: string): Promise<boolean> {
