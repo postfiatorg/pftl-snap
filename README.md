@@ -44,7 +44,7 @@ To use the PFT Ledger, first install it by following these steps:
 
 ## Development
 
-Here’s a basic guide to get started:
+Here's a basic guide to get started:
 
 ### Prerequisites
 
@@ -63,7 +63,10 @@ yarn
 yarn start
 ```
 
-- To only start the UI, navigate to `packages/site` and start from there. The same applies to the snap in `packages/snap`.
+- `yarn start` now runs the minimal host UI in `packages/host-lite`.
+- The legacy peersyst UI in `packages/site` is deprecated and will be removed.
+- To run the legacy UI, use `yarn workspace site start` or `yarn start:all`.
+- To run only the snap, use `yarn workspace @postfiat/pftl-snap start`.
 - If you make changes to the snap, first remove the previously installed version to see the changes.
 - Enable the [MetaMask](https://metamask.io/) in your extensions.
 

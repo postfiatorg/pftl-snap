@@ -1,6 +1,8 @@
-# Web base
+# Web base (deprecated)
 
 > Make sure [nvm] and [yarn] are installed
+
+This UI is deprecated in favor of the minimal host in `packages/host-lite`.
 
 ## Quick start
 

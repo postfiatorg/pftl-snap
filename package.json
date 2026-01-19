@@ -21,7 +21,8 @@
     "lint:eslint": "eslint . --cache --ext js,jsx,ts,tsx",
     "lint:fix": "yarn lint:eslint --fix && yarn lint:misc --write",
     "lint:misc": "prettier '**/*.json' '**/*.md' '!**/CHANGELOG.md' '**/*.yml' --ignore-path .gitignore",
-    "start": "yarn workspaces foreach --parallel --interlaced --verbose run start",
+    "start": "yarn workspace @postfiat/pftl-host-lite start",
+    "start:all": "yarn workspaces foreach --parallel --interlaced --verbose run start",
     "test": "yarn workspace @postfiat/pftl-snap run test"
   },
   "devDependencies": {
