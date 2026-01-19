@@ -1,7 +1,11 @@
 {
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
   "json.schemas": [
     {
-      "fileMatch": ["snap.manifest.json"],
+      "fileMatch": [
+        "snap.manifest.json"
+      ],
       "url": "https://raw.githubusercontent.com/MetaMask/SIPs/main/assets/sip-9/snap.manifest.schema.json"
     }
   ]

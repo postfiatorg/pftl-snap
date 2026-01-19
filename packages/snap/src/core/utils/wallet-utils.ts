@@ -7,7 +7,7 @@ export function bip44CompressedPublicKeyToXRPPublicKey(compressedPublicKey: stri
 }
 
 export function removeHexPreffix(hexString: string): string {
-  if (hexString.startsWith('0x')) {
+  if (hexString.startsWith('0x') || hexString.startsWith('0X')) {
     return hexString.slice(2);
   }
   return hexString;

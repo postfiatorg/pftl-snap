@@ -1,16 +1,10 @@
 import type { Component } from '@metamask/snaps-sdk';
 import { copyable, divider, heading, panel, text } from '@metamask/snaps-sdk';
 
+import { removeHexPreffix } from '../../core/utils/wallet-utils';
 import { translate } from '../locale/translate';
 import { Label } from './TransactionComponents/base/base';
 import { convertHexToString, isHex } from './TransactionComponents/utils/hex';
-
-const stripHexPrefix = (value: string): string => {
-  if (value.startsWith('0x') || value.startsWith('0X')) {
-    return value.slice(2);
-  }
-  return value;
-};
 
 const containsControlCharacters = (value: string): boolean => {
   for (let i = 0; i < value.length; i += 1) {
@@ -26,7 +20,7 @@ const containsControlCharacters = (value: string): boolean => {
 };
 
 const decodeHexMessage = (message: string): { decoded: string; hexMessage: string } | null => {
-  const normalizedHex = stripHexPrefix(message);
+  const normalizedHex = removeHexPreffix(message);
   if (!normalizedHex || normalizedHex.length % 2 !== 0 || !isHex(normalizedHex)) {
     return null;
   }
