@@ -1,7 +1,5 @@
 # Peersyst Deprecation Plan (Tier 1 Minimal Host UI)
 
-Note: Canonical Superstructure copy lives at `products/snap/plans/peersyst_deprecation_plan.md`.
-
 ## Goal
 Replace the current peersyst-based web UI with a minimal host UI that preserves core wallet flows (balance, send, receive, network/account switch) while reducing audit surface and dependency weight.
 

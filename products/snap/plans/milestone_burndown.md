@@ -1,7 +1,5 @@
 # Peersyst Deprecation Burndown (Tier 1 Minimal Host UI)
 
-Note: Canonical Superstructure copy lives at `products/snap/plans/milestone_burndown.md`.
-
 Goal: Replace the peersyst-based web UI with a minimal host UI that preserves core wallet flows (balance, send, receive, account/network switch) while reducing audit surface.
 
 Execution note: The run continues through all milestones unless the user manually interrupts (Ctrl+C).
