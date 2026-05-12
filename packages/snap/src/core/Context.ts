@@ -45,8 +45,9 @@ export class Context {
       const importedWallet = state.importedWallets.find((wallet) => wallet.address === state.activeImportedWallet);
       if (importedWallet) {
         try {
-          const decryptedSeed = await EncryptionManager.decryptData(importedWallet.encryptedSeed);
-          context._activeImportedWallet = Wallet.fromSeed(decryptedSeed);
+          // SECURITY: Decrypt the BIP-39 mnemonic to derive the wallet
+          const decryptedMnemonic = await EncryptionManager.decryptData(importedWallet.encryptedMnemonic);
+          context._activeImportedWallet = Wallet.fromMnemonic(decryptedMnemonic);
         } catch (error) {
           // Don't throw, just continue without the imported wallet
 
@@ -95,14 +96,14 @@ export class Context {
         throw new Error(`Wallet not found for address: ${address}`);
       }
 
-      const decryptedSeed = await EncryptionManager.decryptData(importedWallet.encryptedSeed);
+      const decryptedMnemonic = await EncryptionManager.decryptData(importedWallet.encryptedMnemonic);
 
-      if (!decryptedSeed) {
-        throw new Error('Failed to decrypt seed');
+      if (!decryptedMnemonic) {
+        throw new Error('Failed to decrypt mnemonic');
       }
 
-      // Create wallet from the decrypted seed
-      const newWallet = Wallet.fromSeed(decryptedSeed);
+      // Derive wallet from the decrypted BIP-39 mnemonic
+      const newWallet = Wallet.fromMnemonic(decryptedMnemonic);
 
       // Verify that the created wallet matches the expected address
       if (newWallet.address !== address) {

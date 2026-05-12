@@ -5,10 +5,16 @@ export type Network = {
   explorerUrl?: string;
 };
 
+/**
+ * SECURITY: Imported wallet type now stores an encrypted BIP-39 mnemonic
+ * instead of a raw private key or seed. The mnemonic is encrypted using
+ * AES-256-GCM with a key derived from snap_getEntropy.
+ */
 export type ImportedWallet = {
   address: string;
   publicKey: string;
-  encryptedSeed: string;
+  /** Encrypted BIP-39 mnemonic phrase — decrypted only when needed to derive the wallet. */
+  encryptedMnemonic: string;
 };
 
 export type State = {
