@@ -26,7 +26,7 @@ export const DEFAULT_NETWORKS: Network[] = [
   {
     chainId: 2025,
     name: 'PFTL Testnet',
-    nodeUrl: 'wss://rpc.testnet.postfiat.org:6007',
+    nodeUrl: 'wss://ws.testnet.postfiat.org',
     explorerUrl: 'https://explorer.testnet.postfiat.org',
   },
 ];

@@ -45,6 +45,34 @@ describe('StateManager', () => {
       expect(state.activeNetwork).toEqual(DEFAULT_NETWORKS[0]);
       expect(stateManager.currentState).toEqual(state);
     });
+
+    test('should normalize stored network URLs to the PFTL default network', async () => {
+      const storedState: State = {
+        networks: [
+          {
+            chainId: 2025,
+            name: 'PFTL Testnet',
+            nodeUrl: 'wss://rpc.testnet.postfiat.org:6007',
+            explorerUrl: 'https://explorer.testnet.postfiat.org',
+          },
+        ],
+        activeNetwork: {
+          chainId: 2025,
+          name: 'PFTL Testnet',
+          nodeUrl: 'wss://rpc.testnet.postfiat.org:6007',
+          explorerUrl: 'https://explorer.testnet.postfiat.org',
+        },
+        importedWallets: [],
+        activeImportedWallet: undefined,
+        derivedWalletAddress: undefined,
+      };
+      jest.spyOn(snap, 'request').mockResolvedValue(storedState);
+
+      const state = await stateManager.get();
+
+      expect(state.networks).toEqual(DEFAULT_NETWORKS);
+      expect(state.activeNetwork).toEqual(DEFAULT_NETWORKS[0]);
+    });
   });
 
   describe('set', () => {
