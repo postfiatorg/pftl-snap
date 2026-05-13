@@ -19,7 +19,7 @@ import { areAmountsEqual } from './utils/areAmountsEqual';
 const DEFAULT_FEE_CUSHION = 1.2;
 const DEFAULT_MAX_FEE_XRP = '2';
 
-const ALLOWED_PFTL_RPC_URLS = new Set(['wss://rpc.testnet.postfiat.org:6007']);
+const ALLOWED_PFTL_RPC_URLS = new Set(['wss://ws.testnet.postfiat.org']);
 const EXPECTED_PFTL_NETWORK_ID = 2025;
 
 function normalizeAndValidateRpcUrl(url: string): string {

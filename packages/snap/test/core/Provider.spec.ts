@@ -6,7 +6,7 @@ import { Provider } from '../../src/core/Provider';
 import { RPCClient } from '../../src/core/rpc-client/RpcClient';
 
 describe('Provider', () => {
-  const uri = 'wss://rpc.testnet.postfiat.org:6007';
+  const uri = 'wss://ws.testnet.postfiat.org';
   let provider: Provider;
 
   beforeEach(() => {
@@ -72,7 +72,7 @@ describe('Provider', () => {
     test('Changes the node correctly', async () => {
       expect(provider.node).toEqual(uri);
       jest.spyOn(RPCClient.prototype, 'changeNode').mockResolvedValue(undefined);
-      const newNode = 'wss://rpc.testnet.postfiat.org:6007/';
+      const newNode = 'wss://ws.testnet.postfiat.org/';
       await provider.changeNode(newNode);
       expect(provider.node).toEqual(newNode);
     });
