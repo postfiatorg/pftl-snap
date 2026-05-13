@@ -16,6 +16,8 @@ export function useBlockchainAddressUrl(typeParam: BlockchainAddressType, addres
         return typeParam === 'address' ? 'mainnetAddress' : 'mainnetTx';
       case NetworkChainId.TESTNET:
         return typeParam === 'address' ? 'testnetAddress' : 'testnetTx';
+      case NetworkChainId.PFTL_TESTNET:
+        return typeParam === 'address' ? 'pftlTestnetAddress' : 'pftlTestnetTx';
       default:
         return typeParam === 'address' ? 'mainnetAddress' : 'mainnetTx';
     }

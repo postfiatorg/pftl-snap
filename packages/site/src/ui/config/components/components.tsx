@@ -43,6 +43,8 @@ const components: CreateConfig['components'] = {
       mainnetTx: 'https://livenet.xrpl.org/transactions/',
       devnetAddress: 'https://devnet.xrpl.org/accounts/',
       devnetTx: 'https://devnet.xrpl.org/transactions/',
+      pftlTestnetAddress: 'https://explorer.testnet.postfiat.org/accounts/',
+      pftlTestnetTx: 'https://explorer.testnet.postfiat.org/transactions/',
     },
   },
 };

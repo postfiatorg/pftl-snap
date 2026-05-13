@@ -23,6 +23,8 @@ declare module '@peersyst/react-components' {
     testnetTx: true;
     devnetAddress: true;
     devnetTx: true;
+    pftlTestnetAddress: true;
+    pftlTestnetTx: true;
   }
   export interface BlockchainLinks {
     address: undefined;
@@ -35,6 +37,8 @@ declare module '@peersyst/react-components' {
     testnetTx: string;
     devnetAddress: string;
     devnetTx: string;
+    pftlTestnetAddress: string;
+    pftlTestnetTx: string;
   }
 
   export interface ExtraValidators {
