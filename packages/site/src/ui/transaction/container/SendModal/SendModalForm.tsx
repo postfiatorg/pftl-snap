@@ -1,7 +1,7 @@
 import { TextField, Typography } from '@peersyst/react-components';
 import type { TokenWithBalance } from 'common/models/token';
 import Amount from 'common/utils/Amount';
-import { parseCurrencyCode } from 'common/utils/token/currencyCode';
+import { getDisplayCurrencyCode, XRPL_NATIVE_CURRENCY_CODE } from 'common/utils/token/currencyCode';
 import { useMemo, useState } from 'react';
 import AlertCallout from 'ui/common/components/feedback/AlertCallout/AlertCallout';
 import AmountField from 'ui/common/components/input/AmountField/AmountField';
@@ -35,9 +35,9 @@ export function SendModalForm({ onSubmit, onCancel }: SendModalFormProps) {
 
   const maxBalance = useMemo(() => {
     if (token?.balance) {
-      return new Amount(token.balance.amount, token.decimals, parseCurrencyCode(token.currency));
+      return new Amount(token.balance.amount, token.decimals, getDisplayCurrencyCode(token.currency));
     }
-    return new Amount('0', 6, 'XRP');
+    return new Amount('0', 6, XRPL_NATIVE_CURRENCY_CODE);
   }, [token]);
 
   return (

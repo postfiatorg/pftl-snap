@@ -1,5 +1,6 @@
 import { Image } from '@peersyst/react-components';
 import { Token } from 'common/models';
+import { XRPL_NATIVE_CURRENCY_CODE } from 'common/utils/token/currencyCode';
 import { token_default_logo } from 'ui/assets/images';
 import { XRPLogoIcon } from 'ui/common/icons';
 import useGetTokenInfo from 'ui/token/query/useGetTokenInfo';
@@ -13,12 +14,14 @@ export interface TokenIconProps {
 }
 
 function TokenIcon({ token, size = '2.5rem', loading, style }: TokenIconProps) {
-  const { data: { icon } = {} } = useGetTokenInfo(token, { enabled: !loading || token.currency === 'XRP' });
+  const { data: { icon } = {} } = useGetTokenInfo(token, {
+    enabled: !loading || token.currency === XRPL_NATIVE_CURRENCY_CODE,
+  });
   const css = {
     width: size,
     height: size,
   };
-  if (token.currency === 'XRP') {
+  if (token.currency === XRPL_NATIVE_CURRENCY_CODE) {
     return <XRPLogoIcon css={css} style={style} />;
   }
 

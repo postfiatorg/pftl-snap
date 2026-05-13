@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Amount from 'common/utils/Amount';
-import { parseCurrencyCode } from 'common/utils/token/currencyCode';
+import { getDisplayCurrencyCode } from 'common/utils/token/currencyCode';
 import { useTranslate } from 'ui/locale';
 
 import BalanceInfoDisplay from '../BalanceInfoDisplay/BalanceInfoDisplay';
@@ -15,7 +15,7 @@ export interface AmountAssetInfoDisplayProps {
 function AmountAssetInfoDisplay({ className, asset, index, ...rest }: AmountAssetInfoDisplayProps) {
   const translate = useTranslate('transactions');
 
-  const currency = asset.currency === 'XRP' ? 'XRP' : parseCurrencyCode(asset.currency);
+  const currency = getDisplayCurrencyCode(asset.currency);
 
   return (
     <BalanceInfoDisplay

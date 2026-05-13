@@ -58,7 +58,7 @@ function NFTokenAcceptOfferPlayground({ className, children, ...rest }: NFTokenA
         <TextField placeholder={translate('NFTokenSellOffer')} name="NFTokenSellOffer" label={translate('NFTokenSellOffer')} />
         <TextField name="NFTokenBuyOffer" placeholder={translate('NFTokenBuyOffer')} label={translate('NFTokenBuyOffer')} />
         <NumericField
-          suffix="Only XRP"
+          suffix="Only PFT"
           name="NFTokenBrokerFee"
           placeholder={translate('NFTokenBrokerFee')}
           label={translate('NFTokenBrokerFee')}

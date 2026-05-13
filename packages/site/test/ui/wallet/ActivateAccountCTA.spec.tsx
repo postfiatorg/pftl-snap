@@ -47,7 +47,7 @@ describe('ActivateAccountCTA', () => {
     });
 
     render(<ActivateAccountCTA />);
-    fireEvent.click(screen.getByRole('button', { name: 'Go to faucet' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Fund from faucet' }));
 
     expect(mutate).toHaveBeenCalledTimes(1);
   });

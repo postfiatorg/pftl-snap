@@ -1,6 +1,6 @@
 import { Col } from '@peersyst/react-components';
 import clsx from 'clsx';
-import { parseCurrencyCode } from 'common/utils/token/currencyCode';
+import { getDisplayCurrencyCode } from 'common/utils/token/currencyCode';
 import { useTheme } from 'styled-components';
 import Balance from 'ui/common/components/display/Balance/Balance';
 import FiatBalance from 'ui/wallet/containers/FiatBalance/FiatBalance';
@@ -22,7 +22,7 @@ function BalanceWithFiat({
 }: BalanceWithFiatProps): JSX.Element {
   const { spacing } = useTheme();
 
-  const currency = currencyProp === 'XRP' ? 'XRP' : parseCurrencyCode(currencyProp);
+  const currency = getDisplayCurrencyCode(currencyProp);
 
   return (
     <Col className={clsx('BalanceWithFiat', className)} gap={spacing[gap]} alignItems={align} {...rest}>

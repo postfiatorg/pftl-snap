@@ -6,7 +6,7 @@
   "decimals": 6,
   "peersystUrl": "https://peersyst.com",
   "snapOrigin": "npm:@postfiat/pftl-snap",
-  "snapAboutUrl": "https://xrplsnap.com",
+  "snapAboutUrl": "https://snaps.metamask.io/snap/npm/postfiat/pftl-snap/",
   "fiatCurrency": "usd",
   "refetchIntervals": {
     "balance": 10000,
@@ -44,7 +44,7 @@
   "tokenMetadata": {
     "apiUrl": "https://s1.xrplmeta.org/token/"
   },
-  "reserveInfoLink": "https://xrpl.org/docs/concepts/accounts/reserves",
+  "reserveInfoLink": "https://postfiat.org/whitepaper/",
   "transak": {
     "apiKey": "4a3f3484-0df6-41af-b865-6da3bc82ccd9",
     "defaultCryptoCurrency": "XRP",
@@ -69,7 +69,5 @@
     "testnet": "wss://s.altnet.rippletest.net:51233/",
     "devnet": "wss://s.devnet.rippletest.net:51233/",
     "pftlTestnet": "wss://ws.testnet.postfiat.org"
-  },
-  "backendUrl": "https://xrpl-snap-giveaway.peersyst.tech",
-  "surveyUrl": "https://gleam.io/4mkf3/xrpl-metamask-snap-10000-xrp-early-adopter-campaign"
+  }
 }

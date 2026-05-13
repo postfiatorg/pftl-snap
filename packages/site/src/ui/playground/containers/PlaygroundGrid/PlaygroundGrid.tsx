@@ -26,7 +26,7 @@ const PLAYGROUNDS = [
     path: PlaygroundRoutes.TOKEN,
   },
   {
-    label: 'XRP Payment',
+    label: 'PFT Payment',
     path: PlaygroundRoutes.XRP_PAYMENT,
   },
   {

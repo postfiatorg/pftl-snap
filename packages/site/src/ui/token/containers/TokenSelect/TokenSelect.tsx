@@ -3,7 +3,7 @@ import { Col, Typography } from '@peersyst/react-components';
 import { useControlled } from '@peersyst/react-hooks';
 import clsx from 'clsx';
 import type { TokenWithBalance } from 'common/models/token';
-import { parseCurrencyCode } from 'common/utils/token/currencyCode';
+import { getDisplayCurrencyCode } from 'common/utils/token/currencyCode';
 import { useMemo } from 'react';
 import useGetTokens from 'ui/wallet/query/useGetTokens';
 
@@ -47,7 +47,7 @@ function TokenSelect({
       renderValue={() => (
         <Col>
           <Typography className={clsx(!token && 'Placeholder')} variant="body1" fontWeight={token ? '500' : undefined}>
-            {token ? parseCurrencyCode(token?.currency) : placeholder}
+            {token ? getDisplayCurrencyCode(token.currency) : placeholder}
           </Typography>
         </Col>
       )}

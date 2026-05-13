@@ -1,7 +1,7 @@
 {
   "asfRequireDest": "Require destination tag",
   "asfRequireAuth": "Require authorization",
-  "asfDisallowXRP": "Disallow incoming XRP",
+  "asfDisallowXRP": "Disallow incoming PFT",
   "asfDisableMaster": "Disable master key",
   "asfAccountTxnID": "Account transaction ID",
   "asfNoFreeze": "No freeze",

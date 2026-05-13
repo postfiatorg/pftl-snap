@@ -113,7 +113,7 @@ export default {
   ExtractPrivateKeyRequestBodyStepExplanation3: 'If anyone, even a support agent, asks for your private key, you are being scammed.',
   // Import Wallet Dialog
   ImportWalletHeader: 'Import Post Fiat Wallet',
-  ImportWalletSubHeader: '%origin% wants to import an XRPL wallet',
+  ImportWalletSubHeader: '%origin% wants to import a Post Fiat wallet',
   ImportWalletAddress: 'Wallet Address: %address%',
   ImportWalletWarning: 'Warning: Make sure you trust this site before importing your wallet.',
   ImportWalletConfirm: 'Do you want to import the wallet with address %address% requested by %origin%?',

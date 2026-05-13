@@ -48,6 +48,4 @@ export type Config = {
     devnet: string;
     pftlTestnet: string;
   };
-  backendUrl: string;
-  surveyUrl: string;
 };

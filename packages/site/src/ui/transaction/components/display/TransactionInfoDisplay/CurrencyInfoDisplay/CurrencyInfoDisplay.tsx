@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { parseCurrencyCode } from 'common/utils/token/currencyCode';
+import { getDisplayCurrencyCode } from 'common/utils/token/currencyCode';
 import { Currency } from 'xrpl';
 
 import SimpleTextInfoDisplay from '../SimpleTextInfoDisplay/SimpleTextInfoDisplay';
@@ -16,7 +16,7 @@ function CurrencyInfoDisplay({ className, asset, label, ...rest }: CurrencyInfoD
     <SimpleTextInfoDisplay
       className={clsx('CurrencyInfoDisplay', className)}
       label={label}
-      content={parseCurrencyCode(asset.currency)}
+      content={getDisplayCurrencyCode(asset.currency)}
       {...rest}
     />
   );

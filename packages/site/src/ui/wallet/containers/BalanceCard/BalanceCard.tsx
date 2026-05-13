@@ -1,5 +1,6 @@
 import { Col, Row, Skeleton, useConfig, useTheme } from '@peersyst/react-components';
 import clsx from 'clsx';
+import { XRPL_NATIVE_CURRENCY_CODE } from 'common/utils/token/currencyCode';
 import useWalletState from 'ui/adapter/state/useWalletState';
 import useGetActiveNetwork from 'ui/network/query/useGetActiveNetwork';
 import useGetXrpFiatPriceFromAmount from 'ui/wallet/hooks/useGetXrpFiatPriceFromAmount';
@@ -42,7 +43,7 @@ function BalanceCard({ className, ...rest }: BalanceCardProps) {
               loading={loading}
               fontWeight="600"
               balance={formattedBalance}
-              currency={balance?.currency ?? 'XRP'}
+              currency={balance?.currency ?? XRPL_NATIVE_CURRENCY_CODE}
               variant="h2"
               options={{
                 minimumFractionDigits: 2,

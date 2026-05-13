@@ -1,5 +1,8 @@
 import { convertHexToString, convertStringToHex } from 'xrpl';
 
+export const XRPL_NATIVE_CURRENCY_CODE = 'XRP';
+export const POST_FIAT_NATIVE_CURRENCY_CODE = 'PFT';
+
 /**
  * Returns whether a currency code is standard or not
  * From docs: Currency codes must be exactly 3 ASCII characters in length. The following characters are permitted: all uppercase and lowercase letters, digits, as well as the symbols ?, !, @, #, $, %, ^, &, *, <, >, (, ), {, }, [, ], and |.
@@ -35,4 +38,8 @@ export function parseCurrencyCode(currencyCode: string): string {
   }
 
   return convertHexToString(currencyCode).replace(/\0/gu, '');
+}
+
+export function getDisplayCurrencyCode(currencyCode: string): string {
+  return currencyCode === XRPL_NATIVE_CURRENCY_CODE ? POST_FIAT_NATIVE_CURRENCY_CODE : parseCurrencyCode(currencyCode);
 }

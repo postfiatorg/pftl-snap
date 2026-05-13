@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-globals, no-useless-catch, no-restricted-syntax, @typescript-eslint/restrict-plus-operands */
 /**
- * Encryption utility for sensitive data in the XRPL Snap
+ * Encryption utility for sensitive data in the Post Fiat Snap
  * Note: crypto global is available in the MetaMask Snap environment
  */
 export class EncryptionManager {

@@ -7,12 +7,15 @@ import { Label, TransactionField, TransactionRow } from '../base/base';
 import { formatIOUAmount } from '../utils';
 import { isNumber } from '../utils/data-types-validator';
 
+const XRPL_NATIVE_CURRENCY_CODE = 'XRP';
+const POST_FIAT_NATIVE_CURRENCY_CODE = 'PFT';
+
 const AssetComponent = (asset: Currency, label: LocaleKey = 'Asset'): Component[] => {
   if (!asset) {
     return [];
   }
-  if (asset.currency === 'XRP') {
-    return TransactionRow(label, 'XRP');
+  if (asset.currency === XRPL_NATIVE_CURRENCY_CODE) {
+    return TransactionRow(label, POST_FIAT_NATIVE_CURRENCY_CODE);
   }
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   return TransactionRow(label, `${asset.currency}.${asset.issuer}`);
