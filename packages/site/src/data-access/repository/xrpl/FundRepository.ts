@@ -17,6 +17,8 @@ export class FundRepository {
         return config.faucet.testnetUrl;
       case NetworkChainId.DEVNET:
         return config.faucet.devnetUrl;
+      case NetworkChainId.PFTL_TESTNET:
+        return config.faucet.pftlTestnetUrl;
       default:
         throw new RepositoryError(FundErrorCodes.CHAIN_NOT_SUPPORTED);
     }

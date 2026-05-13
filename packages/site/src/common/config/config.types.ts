@@ -34,6 +34,7 @@ export type Config = {
   faucet: {
     testnetUrl: string;
     devnetUrl: string;
+    pftlTestnetUrl: string;
     xrpAmount: string;
   };
   transak: Omit<TransakConfig, 'environment' | 'containerId'> & { environment: string; containerId: string };

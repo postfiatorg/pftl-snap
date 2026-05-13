@@ -34,6 +34,7 @@ function ActivateAccountCTA(): JSX.Element {
       );
     case NetworkChainId.TESTNET:
     case NetworkChainId.DEVNET:
+    case NetworkChainId.PFTL_TESTNET:
       return (
         <>
           <Typography variant="body1" light textAlign="center">

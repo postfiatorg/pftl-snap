@@ -57,6 +57,7 @@
   "faucet": {
     "testnetUrl": "faucet.altnet.rippletest.net",
     "devnetUrl": "faucet.devnet.rippletest.net",
+    "pftlTestnetUrl": "rpc.testnet.postfiat.org",
     "xrpAmount": "110"
   },
   "retry": {
