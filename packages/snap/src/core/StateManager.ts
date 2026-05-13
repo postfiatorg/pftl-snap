@@ -1,3 +1,5 @@
+import { PFTL_TESTNET_CHAIN_ID, PFTL_TESTNET_EXPLORER_URL, PFTL_TESTNET_NAME, PFTL_TESTNET_WS_URL } from './network';
+
 export type Network = {
   chainId: number;
   name: string;
@@ -24,10 +26,10 @@ export type State = {
  */
 export const DEFAULT_NETWORKS: Network[] = [
   {
-    chainId: 2025,
-    name: 'PFTL Testnet',
-    nodeUrl: 'wss://ws.testnet.postfiat.org',
-    explorerUrl: 'https://explorer.testnet.postfiat.org',
+    chainId: PFTL_TESTNET_CHAIN_ID,
+    name: PFTL_TESTNET_NAME,
+    nodeUrl: PFTL_TESTNET_WS_URL,
+    explorerUrl: PFTL_TESTNET_EXPLORER_URL,
   },
 ];
 

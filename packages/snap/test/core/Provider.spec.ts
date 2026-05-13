@@ -2,11 +2,12 @@
 import { InternalError } from '@metamask/snaps-sdk';
 import type { Request as XrplRequest, SubmittableTransaction } from 'xrpl';
 
+import { PFTL_TESTNET_WS_URL } from '../../src/core/network';
 import { Provider } from '../../src/core/Provider';
 import { RPCClient } from '../../src/core/rpc-client/RpcClient';
 
 describe('Provider', () => {
-  const uri = 'wss://ws.testnet.postfiat.org';
+  const uri = PFTL_TESTNET_WS_URL;
   let provider: Provider;
 
   beforeEach(() => {
@@ -72,7 +73,7 @@ describe('Provider', () => {
     test('Changes the node correctly', async () => {
       expect(provider.node).toEqual(uri);
       jest.spyOn(RPCClient.prototype, 'changeNode').mockResolvedValue(undefined);
-      const newNode = 'wss://ws.testnet.postfiat.org/';
+      const newNode = `${PFTL_TESTNET_WS_URL}/`;
       await provider.changeNode(newNode);
       expect(provider.node).toEqual(newNode);
     });
