@@ -1,7 +1,7 @@
 import { Col, Select, TextField, Typography, useTheme, useToast } from '@peersyst/react-components';
 import { useState } from 'react';
-import useWalletState from 'ui/adapter/state/useWalletState';
 import ControllerFactory from 'ui/adapter/ControllerFactory';
+import useWalletState from 'ui/adapter/state/useWalletState';
 import Button from 'ui/common/components/input/Button/Button';
 import NumericField from 'ui/common/components/input/NumericField/NumericField';
 import { useTranslate } from 'ui/locale';
