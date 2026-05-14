@@ -1,7 +1,7 @@
 import { Col, TextField, Typography } from '@peersyst/react-components';
 import clsx from 'clsx';
-import RepositoryFactory from 'domain/adapter/RepositoryFactory';
 import { Link } from 'react-router-dom';
+import ControllerFactory from 'ui/adapter/ControllerFactory';
 import FormCol from 'ui/common/components/input/FormCol/FormCol';
 import NumericField from 'ui/common/components/input/NumericField/NumericField';
 import { useTranslate } from 'ui/locale';
@@ -32,10 +32,7 @@ function NFTokenCreateOfferPlayground({ className, children, ...rest }: NFTokenC
     validate(payment as any);
 
     try {
-      const result = await RepositoryFactory.metamaskRepository.invokeSnap({
-        method: 'xrpl_signAndSubmit',
-        params: payment,
-      });
+      const result = await ControllerFactory.transactionController.signAndSubmitTransaction(payment);
 
       // eslint-disable-next-line
       window.alert('NFTokenCreateOffer transaction created: ' + JSON.stringify(result));

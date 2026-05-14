@@ -1,9 +1,9 @@
 import { BlockchainAddress, Col, Label, TextField } from '@peersyst/react-components';
 import clsx from 'clsx';
 import type { TokenWithBalance } from 'common/models/token';
-import RepositoryFactory from 'domain/adapter/RepositoryFactory';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ControllerFactory from 'ui/adapter/ControllerFactory';
 import AmountField from 'ui/common/components/input/AmountField/AmountField';
 import FormCol from 'ui/common/components/input/FormCol/FormCol';
 import NumericField from 'ui/common/components/input/NumericField/NumericField';
@@ -50,10 +50,7 @@ function PaymentPlayground({ className, children, ...rest }: PaymentPlaygroundPr
     validate(payment);
 
     try {
-      const result = await RepositoryFactory.metamaskRepository.invokeSnap({
-        method: 'xrpl_signAndSubmit',
-        params: payment,
-      });
+      const result = await ControllerFactory.transactionController.signAndSubmitTransaction(payment);
 
       // eslint-disable-next-line
       window.alert('TrustSet transaction created: ' + JSON.stringify(result));

@@ -3,8 +3,8 @@ import type { Transaction } from 'xrpl';
 import type { Context } from '../../core/Context';
 import type { IHandler } from '../IHandler';
 
-export declare const SignMethod = 'xrpl_sign';
-export declare class SignHandler implements IHandler<typeof SignMethod> {
+export declare const SignPreparedMethod = 'xrpl_signPrepared';
+export declare class SignPreparedHandler implements IHandler<typeof SignPreparedMethod> {
   protected readonly context: Context;
 
   constructor(context: Context);

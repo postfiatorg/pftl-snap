@@ -40,7 +40,7 @@ export default class NetworkController {
         break;
     }
 
-    await withRetries(async () => this.xrplService.load(node), config.retry.times, config.retry.delay);
+    await withRetries(async () => this.xrplService.load(node, chainId), config.retry.times, config.retry.delay);
 
     const { baseReserve, ownerReserve } = await this.xrplService.getNetworkReserve();
     this.baseReserveCostInXrp = String(baseReserve || this.baseReserveCostInXrp);

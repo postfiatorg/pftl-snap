@@ -1,3 +1,5 @@
+import type { SubmitRequest, Transaction } from 'xrpl';
+
 import type { Context } from '../../core/Context';
 import type { XrplResponse } from '../../core/Provider';
 import type { IHandler } from '../IHandler';
@@ -8,5 +10,5 @@ export declare class SignAndSubmitHandler implements IHandler<typeof SignAndSubm
 
   constructor(context: Context);
 
-  handle(origin: string, params: SubmittableTransaction): Promise<XrplResponse<SubmitRequest>>;
+  handle(origin: string, params: Transaction): Promise<XrplResponse<SubmitRequest>>;
 }

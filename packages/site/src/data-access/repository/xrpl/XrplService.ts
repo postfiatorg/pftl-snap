@@ -2,13 +2,21 @@ import { TokenWithBalance } from 'common/models';
 import Amount from 'common/utils/Amount';
 import RepositoryErrorCodes from 'data-access/repository/error/RepositoryErrorCodes';
 import Decimal from 'decimal.js';
-import { AccountNFTsResponse, AccountTxResponse, Client, TxResponse } from 'xrpl';
+import { AccountNFTsResponse, AccountTxResponse, Client, SubmitResponse, Transaction, TxResponse } from 'xrpl';
 
 import RepositoryError from '../error/RepositoryError';
 import { XrplErrorCodes } from './XrplErrorCodes';
 
+const NETWORK_ID_REQUIRED_CHAIN_ID_THRESHOLD = 1024;
+
+type TransactionWithNetworkId = Transaction & {
+  NetworkID?: number;
+};
+
 export class XrplService {
   private nodeUrl: string;
+
+  private chainId?: number;
 
   private _client: Client;
 
@@ -56,8 +64,9 @@ export class XrplService {
     await this.initializeClient();
   }
 
-  async load(nodeUrl: string): Promise<void> {
+  async load(nodeUrl: string, chainId?: number): Promise<void> {
     this.nodeUrl = nodeUrl;
+    this.chainId = chainId;
 
     await this.unload();
 
@@ -171,5 +180,27 @@ export class XrplService {
   public async getTransaction(hash: string): Promise<TxResponse> {
     const client = await this.getClient();
     return await client.request({ command: 'tx', transaction: hash });
+  }
+
+  public async autofillTransaction<T extends Transaction>(transaction: T): Promise<T> {
+    const client = await this.getClient();
+    const preparedTransaction = await client.autofill(transaction);
+
+    if (this.chainId !== undefined && this.chainId > NETWORK_ID_REQUIRED_CHAIN_ID_THRESHOLD) {
+      const preparedTransactionWithNetworkId = preparedTransaction as TransactionWithNetworkId;
+      if (preparedTransactionWithNetworkId.NetworkID === undefined || preparedTransactionWithNetworkId.NetworkID === null) {
+        return {
+          ...preparedTransaction,
+          NetworkID: this.chainId,
+        };
+      }
+    }
+
+    return preparedTransaction;
+  }
+
+  public async submitTransaction(txBlob: string): Promise<SubmitResponse> {
+    const client = await this.getClient();
+    return await client.submit(txBlob);
   }
 }

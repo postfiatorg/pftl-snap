@@ -5,16 +5,79 @@ import { TransactionsWithMarker, XrplTx } from 'common/models/transaction/tx.typ
 import { withRetries } from 'common/query';
 import type Amount from 'common/utils/Amount';
 import { TransactionMeta } from 'common/utils/xrpl/meta';
+import RepositoryError from 'data-access/repository/error/RepositoryError';
+import RepositoryErrorCodes from 'data-access/repository/error/RepositoryErrorCodes';
 import { DomainError } from 'domain/error/DomainError';
 import { DomainEvents } from 'domain/events';
-import { xrpToDrops } from 'xrpl';
+import { Amount as XrplAmount, Payment, SubmitResponse, Transaction, xrpToDrops } from 'xrpl';
 
 import type { MetaMaskRepository } from '../../../data-access/repository/metamask/MetaMaskRepository';
 import type { XrplService } from '../../../data-access/repository/xrpl/XrplService';
 import { TransactionErrorCodes } from '../error/TransactionErrorCodes';
 
+function stringToHex(str: string): string {
+  return Buffer.from(str, 'utf8').toString('hex').toUpperCase();
+}
+
 export default class TransactionController {
   constructor(private readonly metamaskRepository: MetaMaskRepository, private readonly xrplService: XrplService) {}
+
+  private getTransactionHashFromTxResponse(submittedTx: SubmitResponse): string {
+    if (submittedTx.result.engine_result === 'tesSUCCESS') {
+      return submittedTx.result.tx_json.hash!;
+    }
+    if (submittedTx.result.engine_result) {
+      throw new RepositoryError(RepositoryErrorCodes.TRANSACTION_ERROR, {
+        result: submittedTx.result.engine_result,
+      });
+    }
+    throw new RepositoryError(RepositoryErrorCodes.TRANSACTION_ERROR);
+  }
+
+  async signAndSubmitTransaction(transaction: Transaction): Promise<string> {
+    const preparedTransaction = await this.xrplService.autofillTransaction(transaction);
+    const signedTransaction = await this.metamaskRepository.signPreparedTransaction(preparedTransaction);
+    const submittedTransaction = await this.xrplService.submitTransaction(signedTransaction.tx_blob);
+
+    return this.getTransactionHashFromTxResponse(submittedTransaction);
+  }
+
+  private async sendPaymentTransaction({
+    amount,
+    destination,
+    destinationTag,
+    memo,
+  }: {
+    destination: string;
+    amount: XrplAmount;
+    destinationTag?: number;
+    memo?: string;
+  }): Promise<string> {
+    const { account } = await this.metamaskRepository.getWallet();
+
+    const tx: Payment = {
+      TransactionType: 'Payment',
+      Account: account,
+      Destination: destination,
+      Amount: amount,
+    };
+
+    if (destinationTag !== undefined) {
+      tx.DestinationTag = destinationTag;
+    }
+
+    if (memo) {
+      tx.Memos = [
+        {
+          Memo: {
+            MemoData: stringToHex(memo),
+          },
+        },
+      ];
+    }
+
+    return this.signAndSubmitTransaction(tx);
+  }
 
   async getAccountTransactions(address: string, marker: unknown): Promise<TransactionsWithMarker> {
     try {
@@ -84,7 +147,7 @@ export default class TransactionController {
       throw new DomainError(TransactionErrorCodes.INSUCCICIENT_BALANCE);
     }
 
-    return await this.metamaskRepository.send({
+    return await this.sendPaymentTransaction({
       ...rest,
       amount: xrpToDrops(amount),
     });
@@ -97,7 +160,7 @@ export default class TransactionController {
       throw new DomainError(TransactionErrorCodes.INSUCCICIENT_BALANCE);
     }
 
-    return await this.metamaskRepository.send({
+    return await this.sendPaymentTransaction({
       ...rest,
       amount: {
         currency: token.currency,

@@ -1,3 +1,5 @@
+import type { SubmitRequest } from 'xrpl';
+
 import type { Context } from '../../core/Context';
 import type { XrplResponse } from '../../core/Provider';
 import type { IHandler } from '../IHandler';

@@ -1,8 +1,8 @@
 import { CircularProgress, Col } from '@peersyst/react-components';
 import clsx from 'clsx';
 import { NetworkChainId } from 'common/models';
-import RepositoryFactory from 'domain/adapter/RepositoryFactory';
 import { useState } from 'react';
+import ControllerFactory from 'ui/adapter/ControllerFactory';
 import Button from 'ui/common/components/input/Button/Button';
 import useGetActiveNetwork from 'ui/network/query/useGetActiveNetwork';
 import useGetAddress from 'ui/wallet/hooks/useGetAddress';
@@ -69,10 +69,7 @@ export function TokenPaymentPlayground({ className, children, ...rest }: TokenPa
     } as const;
 
     try {
-      const result = await RepositoryFactory.metamaskRepository.invokeSnap({
-        method: 'xrpl_signAndSubmit',
-        params: trustSetSnapWallet,
-      });
+      const result = await ControllerFactory.transactionController.signAndSubmitTransaction(trustSetSnapWallet);
 
       // eslint-disable-next-line
       window.alert('TrustSet transaction created: ' + JSON.stringify(result));

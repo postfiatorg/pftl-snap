@@ -1,19 +1,13 @@
 import type { EIP6963AnnounceProviderEvent, MetaMaskInpageProvider, RequestArguments } from '@metamask/providers';
 import { config } from 'common/config';
 import type { HandlerMethod, HandlerParams, HandlerReturns } from 'common/models/xrpl-snap/src/handler/Handler.types';
-import type { SubmitResponse, Amount as XrplAmount } from 'xrpl';
+import type { Transaction } from 'xrpl';
 
 import type { Network } from '../../../common/models/network/network.types';
 import type { GetSnapsResponse } from '../../../common/models/snap';
 import RepositoryError from '../error/RepositoryError';
-import RepositoryErrorCodes from '../error/RepositoryErrorCodes';
 import { MetaMaskErrorCodes } from './MetaMaskErrorCodes';
 import { withMetaMaskError } from './utils/MetaMaskError';
-
-// Helper function to convert string to hex
-function stringToHex(str: string): string {
-  return Buffer.from(str, 'utf8').toString('hex').toUpperCase();
-}
 
 export type Snap = {
   permissionName: string;
@@ -53,56 +47,12 @@ export class MetaMaskRepository {
     });
   }
 
-  private getTransactionHashFromTxResponse(submittedTx: SubmitResponse): string {
-    if (submittedTx.result.engine_result === 'tesSUCCESS') {
-      return submittedTx.result.tx_json.hash!;
-    } else if (submittedTx.result.engine_result) {
-      throw new RepositoryError(RepositoryErrorCodes.TRANSACTION_ERROR, {
-        result: submittedTx.result.engine_result,
-      });
-    } else {
-      throw new RepositoryError(RepositoryErrorCodes.TRANSACTION_ERROR);
-    }
-  }
-
-  async send({
-    amount,
-    destination,
-    destinationTag,
-    memo,
-  }: {
-    destination: string;
-    amount: XrplAmount;
-    destinationTag?: number;
-    memo?: string;
-  }): Promise<string> {
+  async signPreparedTransaction(transaction: Transaction): Promise<{ tx_blob: string; hash: string }> {
     return await withMetaMaskError(async () => {
-      const { account } = await this.getWallet();
-
-      const tx: any = {
-        TransactionType: 'Payment',
-        Account: account,
-        Destination: destination,
-        DestinationTag: destinationTag,
-        Amount: amount,
-      };
-
-      if (memo) {
-        tx.Memos = [
-          {
-            Memo: {
-              MemoData: stringToHex(memo),
-            },
-          },
-        ];
-      }
-
-      const submittedTx = await this.invokeSnap({
-        method: 'xrpl_signAndSubmit',
-        params: tx,
+      return await this.invokeSnap({
+        method: 'xrpl_signPrepared',
+        params: transaction,
       });
-
-      return this.getTransactionHashFromTxResponse(submittedTx);
     });
   }
 

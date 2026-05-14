@@ -1,10 +1,9 @@
-import type { AccountMethod } from './account/AccountHandlerFactory';
 import type { HandlerFactory } from './HandlerFactory';
-import type { NetworkMethod } from './network/NetworkHandlerFactory';
-import type { TransactionMethod } from './transaction/TransactionHandlerFactory';
 
-export type HandlerMethod = TransactionMethod | NetworkMethod | AccountMethod;
+type Handlers = ReturnType<typeof HandlerFactory>;
 
-export type HandlerParams<Method extends HandlerMethod> = Parameters<ReturnType<typeof HandlerFactory>[Method]['handle']>[1];
+export type HandlerMethod = keyof Handlers;
 
-export type HandlerReturns<Method extends HandlerMethod> = ReturnType<ReturnType<typeof HandlerFactory>[Method]['handle']>;
+export type HandlerParams<Method extends HandlerMethod> = Parameters<Handlers[Method]['handle']>[1];
+
+export type HandlerReturns<Method extends HandlerMethod> = ReturnType<Handlers[Method]['handle']>;

@@ -1,13 +1,14 @@
 import { Col, Select, TextField, Typography, useTheme, useToast } from '@peersyst/react-components';
 import { useState } from 'react';
 import useWalletState from 'ui/adapter/state/useWalletState';
+import ControllerFactory from 'ui/adapter/ControllerFactory';
 import Button from 'ui/common/components/input/Button/Button';
 import NumericField from 'ui/common/components/input/NumericField/NumericField';
 import { useTranslate } from 'ui/locale';
 import { useXrplService } from 'ui/xrpl/hooks/useXrplService';
+import type { TrustSet } from 'xrpl';
 
 import { TokenDetails } from '../../../../common/models/token.types';
-import RepositoryFactory from '../../../../domain/adapter/RepositoryFactory';
 
 interface TrustLineModalFormProps {
   onClose: () => void;
@@ -60,7 +61,6 @@ export default function TrustLineModalForm({ onClose }: TrustLineModalFormProps)
     setLoading(true);
     try {
       const accountInfo = await xrplService.getAccountInfo(issuer);
-      console.log('Issuer account info:', accountInfo);
 
       const flags = accountInfo.Flags || 0;
       const domain = accountInfo.Domain ? Buffer.from(accountInfo.Domain, 'hex').toString('utf-8') : undefined;
@@ -71,12 +71,6 @@ export default function TrustLineModalForm({ onClose }: TrustLineModalFormProps)
         return (flags & flag) === flag;
       };
 
-      console.log('Account flags:', {
-        flags,
-        rippling: checkFlag(ACCOUNT_FLAG.RIPPLING),
-        flagsHex: `0x${flags.toString(16)}`,
-      });
-
       setTokenInfo({
         domain,
         blackholed: checkFlag(ACCOUNT_FLAG.BLACKHOLED),
@@ -85,10 +79,6 @@ export default function TrustLineModalForm({ onClose }: TrustLineModalFormProps)
       });
 
       const foundTokens = await xrplService.getIOUTokens(issuer);
-      console.log('Found tokens for issuer:', {
-        searchIssuer: issuer,
-        tokens: foundTokens,
-      });
       setTokens(foundTokens);
     } catch (error) {
       console.error('Failed to fetch tokens:', error);
@@ -102,10 +92,6 @@ export default function TrustLineModalForm({ onClose }: TrustLineModalFormProps)
   const selectToken = async (token: TokenDetails | undefined) => {
     setError(null);
     if (token) {
-      console.log('Selected token details:', {
-        token,
-        currentIssuer: issuer,
-      });
       if (token.issuer !== issuer) {
         console.warn('Token issuer does not match input issuer:', {
           tokenIssuer: token.issuer,
@@ -125,15 +111,7 @@ export default function TrustLineModalForm({ onClose }: TrustLineModalFormProps)
     setLoading(true);
     try {
       const limitValue = limit.toString();
-      console.log('Trust line details:', {
-        inputIssuer: issuer,
-        selectedTokenIssuer: selectedToken.issuer,
-        selectedTokenCurrency: selectedToken.currency,
-        limitValue,
-        userAddress: address,
-      });
-
-      const trustSetTx = {
+      const trustSetTx: TrustSet = {
         TransactionType: 'TrustSet',
         Account: address,
         Flags: 0,
@@ -144,14 +122,7 @@ export default function TrustLineModalForm({ onClose }: TrustLineModalFormProps)
         },
       };
 
-      console.log('Final transaction:', JSON.stringify(trustSetTx, null, 2));
-
-      const result = await RepositoryFactory.metamaskRepository.invokeSnap({
-        method: 'xrpl_signAndSubmit',
-        params: trustSetTx,
-      });
-
-      console.log('Transaction result:', result);
+      await ControllerFactory.transactionController.signAndSubmitTransaction(trustSetTx);
 
       showToast(translate('trustLineCreated'), { type: 'success' });
       onClose();

@@ -11,6 +11,8 @@ import { RequestHandler, RequestMethod } from './network/RequestHandler';
 import { SignAndSubmitHandler, SignAndSubmitMethod } from './transaction/SignAndSubmitHandler';
 import { SignHandler, SignMethod } from './transaction/SignHandler';
 import { SignMessageHandler, SignMessageMethod } from './transaction/SignMessageHandler';
+import { SignPreparedHandler, SignPreparedMethod } from './transaction/SignPreparedHandler';
+import { SubmitHandler, SubmitMethod } from './transaction/SubmitHandler';
 
 export const HandlerFactory = (context: Context) => ({
   [ChangeNetworkMethod]: new ChangeNetworkHandler(context),
@@ -19,7 +21,9 @@ export const HandlerFactory = (context: Context) => ({
   [RequestMethod]: new RequestHandler(context),
   [GetAccountMethod]: new GetAccountHandler(context),
   [SignMethod]: new SignHandler(context),
+  [SignPreparedMethod]: new SignPreparedHandler(context),
   [SignAndSubmitMethod]: new SignAndSubmitHandler(context),
+  [SubmitMethod]: new SubmitHandler(context),
   [SignMessageMethod]: new SignMessageHandler(context),
   [ExtractPrivateKeyMethod]: new ExtractPrivateKeyHandler(context),
   [ImportWalletMethod]: new ImportWalletHandler(context),

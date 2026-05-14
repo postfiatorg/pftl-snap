@@ -91,31 +91,38 @@ export class RPCClient {
   /**
    * The xrpl.js WebSocket client
    */
-  private client: Client;
+  private client?: Client;
 
   constructor(url: string) {
     this.url = normalizeAndValidateRpcUrl(url);
-    this.client = new Client(this.url);
     this.feeCushion = DEFAULT_FEE_CUSHION;
     this.maxFeeXRP = DEFAULT_MAX_FEE_XRP;
   }
 
+  private getClient(): Client {
+    if (!this.client) {
+      this.client = new Client(this.url);
+    }
+    return this.client;
+  }
+
   async connect(): Promise<void> {
-    if (!this.client.isConnected()) {
-      await this.client.connect();
+    const client = this.getClient();
+    if (!client.isConnected()) {
+      await client.connect();
     }
     await this.getServerInfo();
   }
 
   async disconnect(): Promise<void> {
-    if (this.client.isConnected()) {
+    if (this.client?.isConnected()) {
       await this.client.disconnect();
     }
   }
 
   public async getServerInfo(): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- xrpl Client types don't narrow well across request unions
-    const response: any = await this.client.request({ command: 'server_info' } as any);
+    const response: any = await this.getClient().request({ command: 'server_info' } as any);
 
     const networkId = response?.result?.info?.network_id;
     const buildVersion = response?.result?.info?.build_version;
@@ -145,14 +152,15 @@ export class RPCClient {
   }
 
   public async request<Request extends XrplRequest>(req: Request): Promise<XrplResponse<Request>> {
-    if (!this.client.isConnected()) {
+    const client = this.getClient();
+    if (!client.isConnected()) {
       await this.connect();
     }
     // Ensure server info is loaded/validated even if the client was already connected.
     if (this.networkID == null || this.buildVersion == null) {
       await this.getServerInfo();
     }
-    const response = await this.client.request(req);
+    const response = await this.getClient().request(req);
     return response as unknown as XrplResponse<Request>;
   }
 
@@ -162,12 +170,13 @@ export class RPCClient {
   public async changeNode(url: string): Promise<void> {
     await this.disconnect();
     this.url = normalizeAndValidateRpcUrl(url);
-    this.client = new Client(this.url);
+    this.client = undefined;
     await this.connect();
   }
 
   public async autofill<T extends SubmittableTransaction>(transaction: T, signersCount?: number): Promise<T> {
-    if (!this.client.isConnected()) await this.connect();
+    const client = this.getClient();
+    if (!client.isConnected()) await this.connect();
 
     const tx = { ...transaction };
 
